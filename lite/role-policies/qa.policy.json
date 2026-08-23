@@ -1,0 +1,156 @@
+{
+  "policy_version": "1.0",
+  "role": {
+    "id": "qa",
+    "class": "review",
+    "authority_source": "lead_dispatch",
+    "playbook": "qa-agent.md"
+  },
+  "display_name": "QA",
+  "description": "Defines the test strategy per phase: what is tested, at what level, with what evidence, and what is not.",
+  "authority": {
+    "may_decide": [
+      "test_strategy_decisions_within_scope"
+    ],
+    "must_route": {
+      "security_or_compliance_class_finding": "reviewer",
+      "subject_too_vague_to_strategize": "lead",
+      "master_plan_out_of_scope_overlap": "lead"
+    },
+    "forbidden": [
+      "define_features",
+      "set_deadlines",
+      "take_over_development_responsibility",
+      "approve_releases",
+      "produce_post_implementation_verification_verdict",
+      "dispatch_workers",
+      "duplicate_reviewer_security_compliance_verdict",
+      "network_calls_except_push_or_branch_intake_fetch_or_cross_model"
+    ]
+  },
+  "channels": {
+    "direct": [
+      {
+        "role": "lead",
+        "purpose": "dispatch_clarification_and_strategy_delivery"
+      },
+      {
+        "role": "operator",
+        "purpose": "operator_direct_dispatch_clarification_and_delivery"
+      }
+    ],
+    "bounded_clarification": [
+      {
+        "role": "worker",
+        "purpose": "testability_or_fixture_clarification"
+      }
+    ],
+    "forbidden": [
+      "direct_pm_channel"
+    ],
+    "rhythm_d_apex": "cto"
+  },
+  "artefacts": {
+    "reads": [
+      "**",
+      "docs/architecture/**",
+      "docs/plans/**"
+    ],
+    "writes": [],
+    "owns": [
+      "test_strategy",
+      "qa_docs_bar_gate_record"
+    ]
+  },
+  "skills": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "id": "agent:good-morning",
+        "authorization": "triggered",
+        "triggers": [
+          "session_start"
+        ]
+      },
+      {
+        "id": "agent:cross-model-review",
+        "authorization": "triggered",
+        "triggers": [
+          "load_bearing_strategy_validation"
+        ]
+      },
+      {
+        "id": "agent:docs-bar-gate",
+        "authorization": "triggered",
+        "triggers": [
+          "recurring_docs_drift_check"
+        ]
+      },
+      {
+        "id": "agent:coordination-closeout-templates",
+        "authorization": "read-reference"
+      },
+      {
+        "id": "mythical:verification-completion",
+        "authorization": "read-reference"
+      },
+      {
+        "id": "mythical:root-cause-analysis",
+        "authorization": "read-reference"
+      }
+    ]
+  },
+  "mcp_access": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "key": "agent-bus",
+        "authorization": "always"
+      }
+    ]
+  },
+  "git": {
+    "edit_scope": [],
+    "commit_scope": [],
+    "push_rules": {
+      "A": "records_are_daemon_written_no_coordination_push",
+      "B": "records_are_daemon_written_no_coordination_push",
+      "C": "records_are_daemon_written_no_coordination_push",
+      "D": "records_are_daemon_written_no_coordination_push"
+    },
+    "stage_explicit_paths_only": true,
+    "forbidden": [
+      "stage_all_or_dot",
+      "write_outside_output_directory",
+      "execute_test_suite",
+      "build_or_install_commands"
+    ]
+  },
+  "stops_and_overrides": [
+    {
+      "condition": "subject_too_vague_to_strategize",
+      "action": "emit_needs_clarification_artefact_with_routing_token_and_stop",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "baseline_coverage_requires_running_existing_suite",
+      "action": "mark_unknown_and_let_dispatcher_authorize_worker_run",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "subject_overlaps_master_plan_out_of_scope",
+      "action": "surface_overlap_and_let_dispatcher_decide_pm_escalation",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "strategy_depends_on_architecture_decision_in_flight",
+      "action": "defer_until_architect_verdict_or_mark_strategy_conditional",
+      "override_authority": "lead-with-acknowledgment"
+    }
+  ],
+  "generated_surfaces": [
+    "qa-agent.md",
+    "qa-agent.claude.md"
+  ],
+  "review_harness": true
+}

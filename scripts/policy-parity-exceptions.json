@@ -1,0 +1,43 @@
+{
+  "comment": "Sanctioned full<->lite boundary deltas, pinned exactly and TYPED. Every pin declares its kind and is validated against that kind's constraints by scripts/check-policy-consistency.sh - a pin outside its kind's shape fails, so this list cannot be used to wave through a semantic boundary change. Kinds: citation-repoint (the lite bake ships without ROLES.md, so *_ref citations re-point off ROLES.md) and path-vocabulary (the container's handoff surface is records, so stops *.action tokens map *_path -> *_record_id). Any NEW difference, any stale pin, and any full-set role absent from lite without a lite_omissions declaration fails the check. Adding an entry anywhere in this file is a boundary-projection decision, reviewed like one.",
+  "exceptions": [
+    {
+      "role": "cto",
+      "field": "authority",
+      "path": "green_path.eligibility_ref",
+      "root": "\"ROLES.md \\u00a7\\\"Apex substitution under rhythm D\\\"\"",
+      "lite": "\"cto-agent.md \\u00a7\\\"Role contract\\\"\"",
+      "kind": "citation-repoint"
+    },
+    {
+      "role": "lead",
+      "field": "authority",
+      "path": "green_path.eligibility_ref",
+      "root": "\"ROLES.md \\u00a7\\\"Apex substitution under rhythm D\\\"\"",
+      "lite": "\"lead may not authorize the green path; reserved merges route to the operator\"",
+      "kind": "citation-repoint"
+    },
+    {
+      "role": "lead",
+      "field": "stops_and_overrides",
+      "path": "reviewer_critical_finding.action",
+      "root": "\"acknowledge_hardblock_and_escalate_with_verdict_path\"",
+      "lite": "\"acknowledge_hardblock_and_escalate_with_verdict_record_id\"",
+      "kind": "path-vocabulary"
+    },
+    {
+      "role": "pm",
+      "field": "stops_and_overrides",
+      "path": "scope_discovery_names_portfolio_or_orgwide_concern.action",
+      "root": "\"route_directly_to_operator_with_lead_handoff_path_and_reading\"",
+      "lite": "\"route_to_operator_with_lead_handoff_record_id_and_reading\"",
+      "kind": "path-vocabulary"
+    }
+  ],
+  "lite_omissions": [
+    {
+      "role": "spm",
+      "reason": "strategic stub, not yet operational - no lite distillation exists"
+    }
+  ]
+}

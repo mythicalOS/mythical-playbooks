@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrow-yellow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="760" fill="#0f172a"/>
+
+  <text x="500" y="40" text-anchor="middle" fill="#e2e8f0" font-size="22" font-weight="600">AI Playbook Framework — Role Flow</text>
+
+  <!-- Row 1: Explorer -> PM -->
+  <g>
+    <rect x="80" y="90" width="200" height="90" rx="12" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+    <text x="180" y="125" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">🔍 Explorer</text>
+    <text x="180" y="150" text-anchor="middle" fill="#cbd5e1" font-size="13">codebase discovery</text>
+    <text x="180" y="168" text-anchor="middle" fill="#94a3b8" font-size="11">reads code, maps territory</text>
+  </g>
+
+  <g>
+    <rect x="400" y="90" width="200" height="90" rx="12" fill="#581c87" stroke="#a855f7" stroke-width="2"/>
+    <text x="500" y="125" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">📋 Product Manager</text>
+    <text x="500" y="150" text-anchor="middle" fill="#cbd5e1" font-size="13">master plan, phases</text>
+    <text x="500" y="168" text-anchor="middle" fill="#94a3b8" font-size="11">what &amp; why</text>
+  </g>
+
+  <!-- Row 2: Architect, Lead, QA -->
+  <g>
+    <rect x="80" y="270" width="200" height="90" rx="12" fill="#7c2d12" stroke="#f97316" stroke-width="2"/>
+    <text x="180" y="305" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">🏗️ Architect</text>
+    <text x="180" y="330" text-anchor="middle" fill="#cbd5e1" font-size="13">design vetting</text>
+    <text x="180" y="348" text-anchor="middle" fill="#94a3b8" font-size="11">structural review</text>
+  </g>
+
+  <g>
+    <rect x="400" y="270" width="200" height="90" rx="12" fill="#831843" stroke="#ec4899" stroke-width="2"/>
+    <text x="500" y="305" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">👔 Lead</text>
+    <text x="500" y="330" text-anchor="middle" fill="#cbd5e1" font-size="13">phase coordination</text>
+    <text x="500" y="348" text-anchor="middle" fill="#94a3b8" font-size="11">three-gate reviews</text>
+  </g>
+
+  <g>
+    <rect x="720" y="270" width="200" height="90" rx="12" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+    <text x="820" y="305" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">✅ QA / Test</text>
+    <text x="820" y="330" text-anchor="middle" fill="#cbd5e1" font-size="13">test strategy</text>
+    <text x="820" y="348" text-anchor="middle" fill="#94a3b8" font-size="11">risk-weighted coverage</text>
+  </g>
+
+  <!-- Row 3: Worker + Reviewer (side by side, with dialogue arrow) -->
+  <g>
+    <rect x="320" y="470" width="200" height="90" rx="12" fill="#134e4a" stroke="#14b8a6" stroke-width="2"/>
+    <text x="420" y="505" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">⚙️ Worker</text>
+    <text x="420" y="530" text-anchor="middle" fill="#cbd5e1" font-size="13">execution</text>
+    <text x="420" y="548" text-anchor="middle" fill="#94a3b8" font-size="11">writes the code</text>
+  </g>
+
+  <g>
+    <rect x="600" y="470" width="200" height="90" rx="12" fill="#7f1d1d" stroke="#ef4444" stroke-width="2"/>
+    <text x="700" y="505" text-anchor="middle" fill="#fff" font-size="18" font-weight="600">🛡️ Reviewer</text>
+    <text x="700" y="530" text-anchor="middle" fill="#cbd5e1" font-size="13">OWASP + GDPR</text>
+    <text x="700" y="548" text-anchor="middle" fill="#94a3b8" font-size="11">security &amp; compliance</text>
+  </g>
+
+  <!-- Arrows -->
+  <!-- Explorer -> PM -->
+  <line x1="280" y1="135" x2="395" y2="135" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="337" y="125" text-anchor="middle" fill="#cbd5e1" font-size="11">findings</text>
+
+  <!-- PM -> Lead -->
+  <line x1="500" y1="185" x2="500" y2="265" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="560" y="230" text-anchor="middle" fill="#cbd5e1" font-size="11">master plan</text>
+
+  <!-- Architect -> Lead -->
+  <line x1="280" y1="315" x2="395" y2="315" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="337" y="305" text-anchor="middle" fill="#cbd5e1" font-size="11">design review</text>
+
+  <!-- QA -> Lead -->
+  <line x1="720" y1="315" x2="605" y2="315" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="663" y="305" text-anchor="middle" fill="#cbd5e1" font-size="11">test strategy</text>
+
+  <!-- Lead -> Worker (down-left) -->
+  <line x1="460" y1="365" x2="410" y2="465" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="380" y="420" text-anchor="middle" fill="#cbd5e1" font-size="11">phased tasks</text>
+
+  <!-- Worker -> Lead (up) -->
+  <line x1="480" y1="465" x2="490" y2="365" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="510" y="420" text-anchor="middle" fill="#cbd5e1" font-size="11">completion</text>
+
+  <!-- Lead -> Reviewer (down-right) -->
+  <line x1="560" y1="365" x2="680" y2="465" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="640" y="420" text-anchor="middle" fill="#cbd5e1" font-size="11">gate-2 dispatch</text>
+
+  <!-- Reviewer -> Lead (up) -->
+  <line x1="720" y1="465" x2="600" y2="370" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="730" y="410" text-anchor="middle" fill="#cbd5e1" font-size="11">verdict</text>
+
+  <!-- Worker <-> Reviewer (bidirectional dialogue, yellow) -->
+  <line x1="520" y1="510" x2="595" y2="510" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow-yellow)"/>
+  <line x1="595" y1="525" x2="520" y2="525" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow-yellow)"/>
+  <text x="557" y="498" text-anchor="middle" fill="#fbbf24" font-size="11">dialogue</text>
+
+  <!-- Legend -->
+  <text x="500" y="650" text-anchor="middle" fill="#64748b" font-size="12" font-style="italic">User ↔ PM / Lead in Danish · everything else in English</text>
+  <text x="500" y="670" text-anchor="middle" fill="#64748b" font-size="12" font-style="italic">Each role = playbook framework (how we work), not a learned skill</text>
+  <text x="500" y="700" text-anchor="middle" fill="#fbbf24" font-size="11" font-style="italic">Yellow = direct dialogue · Grey = artefact handoff</text>
+</svg>

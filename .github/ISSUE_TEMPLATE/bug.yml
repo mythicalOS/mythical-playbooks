@@ -1,0 +1,27 @@
+name: Bug report
+description: Something in the playbooks, policies, or scripts is wrong.
+labels: [bug]
+body:
+  - type: input
+    id: commit
+    attributes:
+      label: Commit or tag
+      description: The commit SHA (or tag) you observed the problem on.
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: >-
+        What you did, what you expected, and what happened instead. For a script
+        failure, paste the exact command and output.
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Affected files
+      description: Paths of the playbook, policy, or script files involved.
+    validations:
+      required: false

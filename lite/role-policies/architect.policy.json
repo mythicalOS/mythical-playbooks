@@ -1,0 +1,182 @@
+{
+  "policy_version": "1.0",
+  "role": {
+    "id": "architect",
+    "class": "review",
+    "authority_source": "lead_pm_or_operator_dispatch",
+    "playbook": "architect-agent.md"
+  },
+  "display_name": "Architect",
+  "description": "Read-only architecture review against codebase reality and constraints; four-verdict output with cited evidence.",
+  "authority": {
+    "may_decide": [
+      "input_shape_classification",
+      "architecture_verdict_accept",
+      "architecture_verdict_accept_with_changes",
+      "architecture_verdict_reject",
+      "architecture_verdict_rescope",
+      "review_dimension_findings_within_scope",
+      "review_depth_within_dispatcher_set_bar",
+      "adr_emission_for_crystallized_technical_decision"
+    ],
+    "must_route": {
+      "strategic_or_orgwide_technology_question": "operator",
+      "scope_drag_against_master_plan": "lead",
+      "existing_code_construct_intent_clarification": "worker",
+      "input_too_vague_to_review": "dispatcher"
+    },
+    "forbidden": [
+      "override_implementation_detail",
+      "take_business_or_product_priorities",
+      "act_as_daily_team_lead",
+      "write_production_code",
+      "modify_source_or_configuration",
+      "build_install_test_run_commands",
+      "process_execution_that_runs_target_code",
+      "network_calls_except_push_or_branch_intake_fetch_or_cross_model",
+      "dispatch_workers",
+      "issue_strategic_rescope",
+      "override_own_reject_or_rescope_verdict",
+      "duplicate_reviewer_security_compliance_verdict"
+    ]
+  },
+  "channels": {
+    "direct": [
+      {
+        "role": "lead",
+        "purpose": "design_checkpoint_dispatch_and_verdict_delivery"
+      },
+      {
+        "role": "pm",
+        "purpose": "feasibility_dispatch_during_scoping_and_verdict_delivery"
+      },
+      {
+        "role": "operator",
+        "purpose": "operator_direct_codebase_dispatch_and_verdict_delivery"
+      }
+    ],
+    "bounded_clarification": [
+      {
+        "role": "worker",
+        "purpose": "existing_code_construct_intent_clarification"
+      }
+    ],
+    "forbidden": [
+      "direct_other_team_outreach",
+      "direct_strategic_escalation_bypassing_dispatcher"
+    ],
+    "rhythm_d_apex": "cto"
+  },
+  "artefacts": {
+    "reads": [
+      "**",
+      "docs/architecture/**",
+      "docs/plans/**",
+      "docs/adr/**"
+    ],
+    "writes": [
+      "docs/adr/**"
+    ],
+    "owns": [
+      "design_review_verdict",
+      "technical_adr_record"
+    ]
+  },
+  "skills": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "id": "agent:good-morning",
+        "authorization": "triggered",
+        "triggers": [
+          "session_start"
+        ]
+      },
+      {
+        "id": "agent:cross-model-review",
+        "authorization": "triggered",
+        "triggers": [
+          "load_bearing_verdict_validation"
+        ]
+      },
+      {
+        "id": "agent:adr-authoring",
+        "authorization": "triggered",
+        "triggers": [
+          "accept_verdict_crystallizes_load_bearing_decision"
+        ]
+      },
+      {
+        "id": "agent:coordination-closeout-templates",
+        "authorization": "read-reference"
+      },
+      {
+        "id": "mythical:skill-authoring",
+        "authorization": "read-reference"
+      }
+    ]
+  },
+  "mcp_access": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "key": "agent-bus",
+        "authorization": "always"
+      }
+    ]
+  },
+  "git": {
+    "edit_scope": [
+      "docs/adr/**"
+    ],
+    "commit_scope": [
+      "docs/adr/**"
+    ],
+    "push_rules": {
+      "A": "self_push_adr_commit_when_emitted_verdict_is_a_record",
+      "B": "self_push_adr_commit_when_emitted_verdict_is_a_record",
+      "C": "self_push_adr_commit_when_emitted_verdict_is_a_record",
+      "D": "commit_and_stop_dispatcher_is_single_pusher"
+    },
+    "stage_explicit_paths_only": true,
+    "forbidden": [
+      "stage_all_or_dot",
+      "write_outside_output_directory",
+      "build_install_test_run_commands",
+      "create_merge_or_remove_worktrees"
+    ]
+  },
+  "stops_and_overrides": [
+    {
+      "condition": "input_too_vague_to_review",
+      "action": "route_clarification_to_dispatcher_and_stop_or_emit_intake_status",
+      "override_authority": "none"
+    },
+    {
+      "condition": "operator_direct_codebase_dispatch_missing_evaluation_intent",
+      "action": "emit_needs_clarification_intake_status_routed_and_stop",
+      "override_authority": "none"
+    },
+    {
+      "condition": "input_contradicts_locked_decision_or_prior_architecture",
+      "action": "surface_conflict_before_reviewing",
+      "override_authority": "none"
+    },
+    {
+      "condition": "question_requires_running_code_or_external_systems",
+      "action": "mark_unknown_and_stop",
+      "override_authority": "none"
+    },
+    {
+      "condition": "verdict_reject_or_rescope_issued",
+      "action": "hard_block_implementation_pending_override",
+      "override_authority": "operator",
+      "rhythm_d_route": "cto"
+    }
+  ],
+  "generated_surfaces": [
+    "architect-agent.md",
+    "architect-agent.claude.md"
+  ],
+  "review_harness": true
+}

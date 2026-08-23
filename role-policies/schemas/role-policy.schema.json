@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "role-policy.schema.json",
+  "type": "object",
+  "required": ["policy_version", "role", "authority", "channels", "artefacts", "skills", "mcp_access", "git", "stops_and_overrides", "generated_surfaces"],
+  "additionalProperties": false,
+  "properties": {
+    "policy_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
+    "display_name": { "type": "string", "description": "Human-facing role name for the UI (e.g. \"QA\"). Ignored by generation." },
+    "description": { "type": "string", "description": "One-line human remit for the UI picker. Ignored by generation." },
+    "version": { "type": "string", "description": "Human role-version badge for the UI (distinct from policy_version). Optional." },
+    "role": {
+      "type": "object",
+      "required": ["id", "class", "authority_source", "playbook"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "enum": ["cto", "architect", "lead", "pm", "worker", "qa", "reviewer", "designer", "explorer", "devil", "ops", "spm"] },
+        "class": { "enum": ["apex-proxy", "orchestration", "planning", "execution", "review", "reconnaissance", "sparring", "observation", "stub"] },
+        "authority_source": { "$ref": "#/$defs/identifier" },
+        "playbook": { "$ref": "#/$defs/pathGlob" }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "required": ["may_decide", "must_route", "forbidden"],
+      "additionalProperties": false,
+      "properties": {
+        "may_decide": { "type": "array", "items": { "$ref": "#/$defs/identifier" } },
+        "must_route": { "type": "object", "propertyNames": { "pattern": "^[a-z0-9_]+$" }, "additionalProperties": { "$ref": "#/$defs/identifier" } },
+        "forbidden": { "type": "array", "items": { "$ref": "#/$defs/identifier" } },
+        "reserved_surface": { "type": "array", "items": { "$ref": "#/$defs/identifier" } },
+        "green_path": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["may_authorize", "eligibility_ref"],
+          "properties": {
+            "may_authorize": { "type": "boolean" },
+            "eligibility_ref": { "type": "string" }
+          }
+        }
+      }
+    },
+    "channels": {
+      "type": "object",
+      "required": ["direct", "bounded_clarification", "forbidden"],
+      "additionalProperties": false,
+      "properties": {
+        "direct": { "type": "array", "items": { "$ref": "#/$defs/channel" } },
+        "bounded_clarification": { "type": "array", "items": { "$ref": "#/$defs/channel" } },
+        "forbidden": { "type": "array", "items": { "$ref": "#/$defs/identifier" } },
+        "rhythm_d_apex": { "enum": ["cto", null] }
+      }
+    },
+    "artefacts": {
+      "type": "object",
+      "required": ["reads", "writes", "owns"],
+      "additionalProperties": false,
+      "properties": {
+        "reads": { "type": "array", "items": { "$ref": "#/$defs/pathGlob" } },
+        "writes": { "type": "array", "items": { "$ref": "#/$defs/pathGlob" } },
+        "owns": { "type": "array", "items": { "$ref": "#/$defs/identifier" } }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "required": ["list_is_exhaustive", "allowed"],
+      "additionalProperties": false,
+      "properties": {
+        "list_is_exhaustive": { "type": "boolean" },
+        "allowed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "authorization"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "pattern": "^(mythical:|agent:)?[a-z0-9][a-z0-9._-]*$", "maxLength": 64 },
+              "authorization": { "enum": ["always", "triggered", "read-reference"] },
+              "triggers": { "type": "array", "items": { "$ref": "#/$defs/identifier" } },
+              "rhythm_rules": { "$ref": "#/$defs/rhythmBlock" },
+              "cannot_authorize": { "type": "array", "items": { "$ref": "#/$defs/identifier" } }
+            }
+          }
+        }
+      }
+    },
+    "mcp_access": {
+      "type": "object",
+      "required": ["list_is_exhaustive", "allowed"],
+      "additionalProperties": false,
+      "properties": {
+        "list_is_exhaustive": { "type": "boolean" },
+        "allowed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["key", "authorization"],
+            "additionalProperties": false,
+            "properties": {
+              "key": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$", "maxLength": 64 },
+              "authorization": { "enum": ["always", "leased"] }
+            }
+          }
+        }
+      }
+    },
+    "git": {
+      "type": "object",
+      "required": ["edit_scope", "commit_scope", "push_rules", "stage_explicit_paths_only"],
+      "additionalProperties": false,
+      "properties": {
+        "edit_scope": { "type": "array", "items": { "$ref": "#/$defs/pathGlob" } },
+        "commit_scope": { "type": "array", "items": { "$ref": "#/$defs/pathGlob" } },
+        "push_rules": { "$ref": "#/$defs/rhythmBlock" },
+        "stage_explicit_paths_only": { "type": "boolean" },
+        "forbidden": { "type": "array", "items": { "$ref": "#/$defs/identifier" } }
+      }
+    },
+    "stops_and_overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["condition", "action", "override_authority"],
+        "additionalProperties": false,
+        "properties": {
+          "condition": { "$ref": "#/$defs/identifier" },
+          "action": { "$ref": "#/$defs/identifier" },
+          "override_authority": { "enum": ["operator", "lead-with-acknowledgment", "none"] },
+          "rhythm_d_route": { "$ref": "#/$defs/identifier" }
+        }
+      }
+    },
+    "generated_surfaces": { "type": "array", "items": { "$ref": "#/$defs/pathGlob" } },
+    "review_harness": {
+      "type": "boolean",
+      "description": "Least-privilege hygiene capability (M14 WS5, design note 2026-07-09 §3 item 5): true when the role legitimately drives cross-model review gates. Consumed by the daemon's POST /review/run capability check via the injected PolicyProvider (§1.4/§2.3), checked only when the caller's role is known. Additive and OPTIONAL — absent = false = back-compat. NOT the review lane's security boundary; the per-session MYTHICAL_REVIEW_TOKEN is (§2.3)."
+    }
+  },
+  "$defs": {
+    "identifier": { "type": "string", "pattern": "^[a-z0-9_]+$", "maxLength": 64 },
+    "pathGlob": { "type": "string", "pattern": "^[A-Za-z0-9_.<>/*-]+$", "maxLength": 120 },
+    "channel": {
+      "type": "object",
+      "required": ["role", "purpose"],
+      "additionalProperties": false,
+      "properties": { "role": { "$ref": "#/$defs/identifier" }, "purpose": { "$ref": "#/$defs/identifier" } }
+    },
+    "rhythmBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "A": { "$ref": "#/$defs/identifier" }, "B": { "$ref": "#/$defs/identifier" },
+        "C": { "$ref": "#/$defs/identifier" }, "D": { "$ref": "#/$defs/identifier" }
+      }
+    }
+  }
+}

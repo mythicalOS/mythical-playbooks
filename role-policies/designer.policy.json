@@ -1,0 +1,176 @@
+{
+  "policy_version": "1.0",
+  "display_name": "Designer",
+  "description": "Visual/interaction design review; design system + advisory UX verdicts",
+  "role": {
+    "id": "designer",
+    "class": "review",
+    "authority_source": "lead_pm_or_operator_dispatch",
+    "playbook": "roles/designer-agent.md"
+  },
+  "authority": {
+    "may_decide": [
+      "design_system_decisions_within_scope",
+      "design_verdict_accept",
+      "design_verdict_accept_with_changes",
+      "design_verdict_revise",
+      "visual_and_interaction_findings_within_scope",
+      "review_depth_within_dispatcher_set_bar"
+    ],
+    "must_route": {
+      "security_or_compliance_class_finding": "reviewer",
+      "technical_architecture_question": "architect",
+      "product_scope_or_priority_question": "pm",
+      "subject_too_vague_to_critique": "dispatcher"
+    },
+    "forbidden": [
+      "define_features",
+      "set_deadlines",
+      "take_business_or_product_priorities",
+      "make_architecture_decisions",
+      "write_production_code",
+      "modify_source_or_configuration",
+      "build_install_test_run_commands",
+      "process_execution_that_runs_target_code",
+      "dispatch_workers",
+      "duplicate_reviewer_security_compliance_verdict",
+      "duplicate_architect_technical_verdict",
+      "network_calls_except_push_or_branch_intake_fetch_or_cross_model"
+    ]
+  },
+  "channels": {
+    "direct": [
+      {
+        "role": "lead",
+        "purpose": "design_checkpoint_dispatch_and_verdict_delivery"
+      },
+      {
+        "role": "pm",
+        "purpose": "design_feasibility_dispatch_during_scoping_and_verdict_delivery"
+      },
+      {
+        "role": "operator",
+        "purpose": "operator_direct_dispatch_and_verdict_delivery"
+      }
+    ],
+    "bounded_clarification": [
+      {
+        "role": "worker",
+        "purpose": "ui_construct_or_component_intent_clarification"
+      }
+    ],
+    "forbidden": [
+      "direct_other_team_outreach",
+      "direct_strategic_escalation_bypassing_dispatcher"
+    ],
+    "rhythm_d_apex": "cto"
+  },
+  "artefacts": {
+    "reads": [
+      "**",
+      "docs/plans/**",
+      "docs/design-reviews/**",
+      "docs/design-system/**",
+      "DESIGN.md"
+    ],
+    "writes": [
+      "docs/design-system/**",
+      "docs/ux-reviews/**",
+      "DESIGN.md"
+    ],
+    "owns": [
+      "design_system",
+      "ux_review_verdict"
+    ]
+  },
+  "skills": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "id": "agent:good-morning",
+        "authorization": "triggered",
+        "triggers": [
+          "session_start"
+        ]
+      },
+      {
+        "id": "agent:cross-model-review",
+        "authorization": "triggered",
+        "triggers": [
+          "load_bearing_verdict_validation"
+        ]
+      },
+      {
+        "id": "agent:coordination-closeout-templates",
+        "authorization": "read-reference"
+      },
+      {
+        "id": "mythical:verification-completion",
+        "authorization": "read-reference"
+      }
+    ]
+  },
+  "mcp_access": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "key": "agent-bus",
+        "authorization": "always"
+      }
+    ]
+  },
+  "git": {
+    "edit_scope": [
+      "docs/design-system/**",
+      "docs/ux-reviews/**",
+      "DESIGN.md"
+    ],
+    "commit_scope": [
+      "docs/design-system/**",
+      "docs/ux-reviews/**",
+      "DESIGN.md"
+    ],
+    "push_rules": {
+      "A": "self_push_one_commit_per_review",
+      "B": "self_push_one_commit_per_review",
+      "C": "self_push_one_commit_per_review",
+      "D": "commit_and_stop_dispatcher_is_single_pusher"
+    },
+    "stage_explicit_paths_only": true,
+    "forbidden": [
+      "stage_all_or_dot",
+      "write_outside_output_directory",
+      "write_production_code",
+      "build_install_test_run_commands",
+      "create_merge_or_remove_worktrees"
+    ]
+  },
+  "stops_and_overrides": [
+    {
+      "condition": "subject_too_vague_to_critique",
+      "action": "emit_needs_clarification_artefact_with_routing_token_and_stop",
+      "override_authority": "none"
+    },
+    {
+      "condition": "design_subject_overlaps_architecture_or_security",
+      "action": "surface_and_route_to_proper_review_role",
+      "override_authority": "none"
+    },
+    {
+      "condition": "design_critique_depends_on_unresolved_product_scope",
+      "action": "defer_until_pm_scope_or_mark_critique_conditional",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "verdict_revise_issued",
+      "action": "request_design_rework_lead_overridable",
+      "override_authority": "lead-with-acknowledgment"
+    }
+  ],
+  "generated_surfaces": [
+    "roles/designer-agent.md",
+    "roles/designer-agent.claude.md",
+    "roles/designer-agent.codex.md"
+  ],
+  "review_harness": true
+}

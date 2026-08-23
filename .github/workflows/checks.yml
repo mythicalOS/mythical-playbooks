@@ -1,0 +1,112 @@
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Install schema engine
+        run: python3 -m pip install jsonschema
+
+      # The policy/anchor validators resolve namespaced (mythical:/agent:) skill ids
+      # against a sibling mythical-skills checkout. Tokenless clone works once that
+      # repo is public; while it is private this step warns and the two validator
+      # steps below fail with their own clear resolution message.
+      - name: Fetch companion mythical-skills (cross-repo resolution)
+        run: |
+          git clone --depth 1 "https://github.com/${{ github.repository_owner }}/mythical-skills" ../mythical-skills \
+            || echo "::warning::companion mythical-skills checkout unavailable — namespaced skill/anchor resolution will fail below"
+
+      - name: Rendered contracts are fresh
+        run: bash scripts/render-contracts.sh --check
+
+      - name: Policies validate
+        run: bash scripts/validate-policies.sh
+
+      # Boundary parity (full <-> lite, pinned exceptions only) + the semantic
+      # rules JSON Schema cannot express (closed routing/override vocabulary,
+      # rhythm coverage, duplicates). The selftest proves the checker still
+      # fails on each drift class before the real run is trusted.
+      - name: Policy consistency (parity + semantic lint)
+        run: |
+          bash scripts/check-policy-consistency.sh --selftest
+          bash scripts/check-policy-consistency.sh
+
+      - name: Section anchors resolve
+        run: bash scripts/check-anchors.sh
+
+      # Content gate: no internal/private vocabulary may appear in any tracked file.
+      # Reads bytes and decodes permissively, so a stray NUL byte cannot hide a file
+      # from the scan. The gate's own definition file is the single exemption — it
+      # necessarily contains the patterns it bans. Product concepts of this repo
+      # ("role playbook", docs/handoffs, docs/closeouts, docs/design-reviews, "bus",
+      # operator/maintainer) are deliberately NOT gated: no pattern below matches them.
+      - name: Content gate (banned terms)
+        run: |
+          python3 - <<'PY'
+          import re, subprocess, sys
+
+          SELF = ".github/workflows/checks.yml"  # holds the pattern list itself
+
+          PATTERNS = [
+              (r"\bBOSS\b", 0),          # retired authority token - word, case-sensitive
+              (r"hameddk", re.I),
+              (r"esmiley", re.I),
+              (r"sattari", re.I),
+              (r"\bHamed\b", 0),
+              (r"mythical-master-plan", re.I),
+              (r"\bagent-web\b", re.I),
+              (r"mythical-project", re.I),
+              (r"agent-remote-mcp", re.I),
+              (r"agent-local-mcp", re.I),
+              (r"agent-daemon", re.I),
+              (r"mythical-server", re.I),
+              (r"mythical-bus", re.I),
+              (r"mythical-asgard", re.I),
+              (r"asgard", re.I),
+              (r"\bde-net\b", re.I),
+              (r"\bdenet\b", re.I),
+              (r"saas-draft", re.I),
+              (r"/Users/", 0),           # macOS home paths; case-sensitive so REST
+                                         # routes like /users/ stay legal
+              (r"Claude-Session:", 0),
+              (r"agent-playbooks", re.I),
+              (r"agent-skills", re.I),
+          ]
+          COMPILED = [(re.compile(p, f), p) for p, f in PATTERNS]
+
+          out = subprocess.run(["git", "ls-files", "-z"],
+                               capture_output=True, check=True)
+          files = [f.decode("utf-8", errors="replace")
+                   for f in out.stdout.split(b"\x00") if f]
+
+          hits = 0
+          for path in files:
+              if path == SELF:
+                  continue
+              with open(path, "rb") as fh:
+                  text = fh.read().decode("utf-8", errors="replace")
+              for lineno, line in enumerate(text.splitlines(), 1):
+                  for rx, label in COMPILED:
+                      if rx.search(line):
+                          print(f"{path}:{lineno}: banned term {label!r}: "
+                                f"{line.strip()[:160]}")
+                          hits += 1
+          if hits:
+              print(f"\nContent gate FAILED: {hits} hit(s).", file=sys.stderr)
+              sys.exit(1)
+          print(f"Content gate passed: {len(files)} tracked files scanned, 0 hits.")
+          PY

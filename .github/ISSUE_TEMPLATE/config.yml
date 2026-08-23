@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or idea (Discussions)
+    url: https://github.com/mythicalOS/mythical-playbooks/discussions
+    about: Prefer Discussions for open-ended questions and ideas.
+  - name: Security report
+    url: https://github.com/mythicalOS/mythical-playbooks/security/policy
+    about: Report vulnerabilities privately — never through public issues.
