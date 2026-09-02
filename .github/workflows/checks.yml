@@ -1,0 +1,71 @@
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install schema engine
+        run: python3 -m pip install jsonschema
+
+      # The policy/anchor validators resolve namespaced (mythical:/agent:) skill ids
+      # against a sibling mythical-skills checkout. Tokenless clone works once that
+      # repo is public; while it is private this step warns and the two validator
+      # steps below fail with their own clear resolution message.
+      - name: Fetch companion mythical-skills (cross-repo resolution)
+        run: |
+          git clone --depth 1 "https://github.com/${{ github.repository_owner }}/mythical-skills" ../mythical-skills \
+            || echo "::warning::companion mythical-skills checkout unavailable — namespaced skill/anchor resolution will fail below"
+
+      # The selftest proves the renderer's REFUSAL paths still refuse — a blank
+      # or absent doctrine source, a broken marker pair, a deleted doctrine
+      # block — and that a refusal mutates nothing. Those guards exist to stop
+      # SILENT doctrine erasure, so they run before the freshness check below is
+      # worth trusting.
+      - name: Rendered contracts are fresh
+        run: |
+          bash scripts/render-contracts.sh --selftest
+          bash scripts/render-contracts.sh --check
+
+      - name: Policies validate
+        run: bash scripts/validate-policies.sh
+
+      # Boundary parity (full <-> lite, pinned exceptions only) + the semantic
+      # rules JSON Schema cannot express (closed routing/override vocabulary,
+      # rhythm coverage, duplicates). The selftest proves the checker still
+      # fails on each drift class before the real run is trusted.
+      - name: Policy consistency (parity + semantic lint)
+        run: |
+          bash scripts/check-policy-consistency.sh --selftest
+          bash scripts/check-policy-consistency.sh
+
+      # One bridge server name exists; the retired prefix must never re-enter
+      # shipped content. The selftest proves the gate still fails on a seeded
+      # occurrence before the real run is trusted - a scan that cannot run
+      # exits 2 rather than reporting a pass.
+      - name: Bridge-prefix absence gate
+        run: |
+          bash scripts/check-bridge-prefix.sh --selftest
+          bash scripts/check-bridge-prefix.sh
+
+      # LAST, and `always()`: this check is a known, pre-existing red (dangling
+      # section anchors that predate this branch). A failing step stops every
+      # later step by default, which had silently disabled the bridge-prefix gate
+      # for as long as it has been red. Running it last — and marking the gates
+      # above independent of it — keeps a known red from taking the suite down.
+      - name: Section anchors resolve
+        if: ${{ always() }}
+        run: bash scripts/check-anchors.sh

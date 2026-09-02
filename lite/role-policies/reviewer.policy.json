@@ -1,0 +1,174 @@
+{
+  "policy_version": "1.0",
+  "role": {
+    "id": "reviewer",
+    "class": "review",
+    "authority_source": "lead_dispatch_gate_two",
+    "playbook": "reviewer-agent.md"
+  },
+  "display_name": "Reviewer",
+  "description": "Independent, read-only security and compliance verdicts on frozen diffs.",
+  "authority": {
+    "may_decide": [
+      "severity_grading_within_taxonomy",
+      "finding_categorization_within_scope",
+      "verdict_block",
+      "verdict_accept_with_required_fixes",
+      "verdict_accept_with_advisories",
+      "verdict_accept",
+      "surface_trigger_evaluation_from_diff"
+    ],
+    "must_route": {
+      "scope_decision_or_response_to_finding": "lead",
+      "product_or_scope_advice_observed": "lead",
+      "strategic_technology_advice_observed": "lead",
+      "coverage_prescription_observed": "lead",
+      "finding_requires_running_code_to_confirm": "lead",
+      "finding_requires_cve_or_advisory_data": "lead",
+      "extra_scope_runtime_verification": "lead"
+    },
+    "forbidden": [
+      "take_scope_decisions",
+      "approve_releases",
+      "replace_qa_process",
+      "duplicate_qa_coverage_verdict",
+      "implement_solutions_directly",
+      "modify_source_test_or_configuration",
+      "build_install_test_run_commands",
+      "network_calls_except_branch_intake_fetch_or_cross_model",
+      "dispatch_workers",
+      "create_merge_or_remove_worktrees",
+      "review_mutable_remediation_state"
+    ]
+  },
+  "channels": {
+    "direct": [
+      {
+        "role": "worker",
+        "purpose": "private_security_intent_clarification_dialogue"
+      },
+      {
+        "role": "lead",
+        "purpose": "gate_two_dispatch_and_verdict_delivery"
+      },
+      {
+        "role": "operator",
+        "purpose": "operator_direct_dispatch_and_verdict_delivery"
+      }
+    ],
+    "bounded_clarification": [
+      {
+        "role": "worker",
+        "purpose": "finding_intent_or_context_clarification"
+      }
+    ],
+    "forbidden": [
+      "direct_pm_channel",
+      "direct_strategic_escalation_bypassing_dispatcher",
+      "route_continuity_decision_to_operator_or_cto"
+    ],
+    "rhythm_d_apex": "cto"
+  },
+  "artefacts": {
+    "reads": [
+      "**",
+      "docs/architecture/**",
+      "docs/plans/**"
+    ],
+    "writes": [],
+    "owns": [
+      "code_review_verdict"
+    ]
+  },
+  "skills": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "id": "agent:good-morning",
+        "authorization": "triggered",
+        "triggers": [
+          "session_start"
+        ]
+      },
+      {
+        "id": "agent:coordination-closeout-templates",
+        "authorization": "read-reference"
+      }
+    ]
+  },
+  "mcp_access": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "key": "agent-bus",
+        "authorization": "always"
+      }
+    ]
+  },
+  "git": {
+    "edit_scope": [],
+    "commit_scope": [],
+    "push_rules": {
+      "A": "commit_and_stop_daemon_is_the_only_git_egress",
+      "B": "commit_and_stop_daemon_is_the_only_git_egress",
+      "C": "commit_and_stop_daemon_is_the_only_git_egress",
+      "D": "commit_and_stop_daemon_is_the_only_git_egress"
+    },
+    "stage_explicit_paths_only": true,
+    "forbidden": [
+      "stage_all_or_dot",
+      "write_outside_output_directory",
+      "build_install_test_run_commands",
+      "live_exploitation_or_fuzzing",
+      "create_merge_or_remove_worktrees"
+    ]
+  },
+  "stops_and_overrides": [
+    {
+      "condition": "finding_severity_critical",
+      "action": "hard_block_release_pending_override",
+      "override_authority": "operator",
+      "rhythm_d_route": "cto"
+    },
+    {
+      "condition": "finding_severity_high",
+      "action": "fix_before_release_in_affected_surface",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "finding_severity_medium",
+      "action": "fix_next_phase_if_not_immediately",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "finding_severity_low",
+      "action": "no_blocking_effect_note_only",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "triggered_required_surface_missing_intake",
+      "action": "emit_intake_gap_finding_and_stop_on_that_surface",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "dispatch_does_not_name_diff_or_regimes",
+      "action": "emit_needs_clarification_intake_status_routed_and_stop",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "finding_requires_runtime_or_advisory_confirmation",
+      "action": "mark_unknown_and_surface_for_lead_authorization",
+      "override_authority": "lead-with-acknowledgment"
+    },
+    {
+      "condition": "degraded_context_during_judgment_heavy_review",
+      "action": "emit_review_paused_wip_handoff_routed_to_lead_and_stop",
+      "override_authority": "lead-with-acknowledgment"
+    }
+  ],
+  "doctrine_source": "doctrine/reviewer.md",
+  "generated_surfaces": [
+    "lite/reviewer-agent.md"
+  ],
+  "review_harness": true
+}

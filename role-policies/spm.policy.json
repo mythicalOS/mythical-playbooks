@@ -1,0 +1,46 @@
+{
+  "policy_version": "1.0",
+  "display_name": "SPM",
+  "description": "Cross-product coherence and synergy",
+  "role": {
+    "id": "spm",
+    "class": "stub",
+    "authority_source": "operator",
+    "playbook": "roles/spm-agent.md"
+  },
+  "authority": {
+    "may_decide": [],
+    "must_route": {},
+    "forbidden": []
+  },
+  "channels": {
+    "direct": [],
+    "bounded_clarification": [],
+    "forbidden": []
+  },
+  "artefacts": {
+    "reads": [],
+    "writes": [],
+    "owns": []
+  },
+  "skills": {
+    "list_is_exhaustive": true,
+    "allowed": []
+  },
+  "mcp_access": {
+    "list_is_exhaustive": true,
+    "allowed": []
+  },
+  "git": {
+    "edit_scope": [],
+    "commit_scope": [],
+    "push_rules": {},
+    "stage_explicit_paths_only": true
+  },
+  "stops_and_overrides": [],
+  "doctrine_source": "doctrine/spm.md",
+  "generated_surfaces": [
+    "roles/spm-agent.md"
+  ],
+  "review_harness": false
+}

@@ -1,0 +1,304 @@
+{
+  "policy_version": "1.0",
+  "display_name": "Lead",
+  "description": "Orchestration across multi-step technical projects",
+  "role": {
+    "id": "lead",
+    "class": "orchestration",
+    "authority_source": "operator_or_pm_handoff",
+    "playbook": "roles/lead-agent.md"
+  },
+  "authority": {
+    "may_decide": [
+      "workflow_profile_selection",
+      "delivery_mode_selection",
+      "dispatch_target_identity_selection",
+      "dispatch_brief_shaping_within_accepted_scope",
+      "gate_timing_for_accepted_scope_work",
+      "review_role_dispatch_at_discretion",
+      "gate_decision_consuming_review_verdicts",
+      "landing_request_and_gated_cleanup",
+      "execution_level_clarification_within_accepted_phase",
+      "within_phase_scope_expansion_flag_to_user"
+    ],
+    "must_route": {
+      "implementation_question_in_scope": "worker",
+      "architecture_or_boundary_question": "architect",
+      "test_strategy_or_coverage_question": "qa",
+      "visual_design_or_interaction_question": "designer",
+      "security_or_compliance_question": "reviewer",
+      "scope_question_against_master_plan": "pm",
+      "strategic_portfolio_or_orgwide_concern": "operator",
+      "operator_only_override_or_risk_triage": "operator"
+    },
+    "forbidden": [
+      "write_production_code",
+      "execute_runtime_commands_against_project_paths",
+      "take_strategic_product_decision_alone",
+      "be_sole_decision_maker",
+      "become_permanent_operations_bottleneck",
+      "issue_master_plan_scope_edit",
+      "override_architect_reject_or_rescope",
+      "override_reviewer_critical_finding",
+      "dispatch_spm_agent"
+    ],
+    "green_path": {
+      "may_authorize": false,
+      "eligibility_ref": "ROLES.md §\"Apex substitution under rhythm D\""
+    }
+  },
+  "channels": {
+    "direct": [
+      {
+        "role": "worker",
+        "purpose": "dispatch_refinement_status_and_closeout"
+      },
+      {
+        "role": "pm",
+        "purpose": "scope_discovery_handoff_and_acknowledgment"
+      },
+      {
+        "role": "operator",
+        "purpose": "strategic_escalation_and_operator_only_override"
+      },
+      {
+        "role": "architect",
+        "purpose": "design_review_dispatch_and_verdict_receipt"
+      },
+      {
+        "role": "qa",
+        "purpose": "test_strategy_dispatch_and_floor_receipt"
+      },
+      {
+        "role": "designer",
+        "purpose": "design_checkpoint_dispatch_and_verdict_receipt"
+      },
+      {
+        "role": "reviewer",
+        "purpose": "security_compliance_dispatch_and_verdict_receipt"
+      }
+    ],
+    "bounded_clarification": [
+      {
+        "role": "worker",
+        "purpose": "implementation_question_in_scope_clarification"
+      }
+    ],
+    "forbidden": [
+      "direct_spm_channel",
+      "interactive_resolution_of_routed_apex_escalation"
+    ],
+    "rhythm_d_apex": "cto"
+  },
+  "artefacts": {
+    "reads": [
+      "docs/design-reviews/**",
+      "docs/adr/**",
+      "docs/design-system/**",
+      "docs/ux-reviews/**",
+      "docs/ops-intake/**",
+      "docs/architecture/**",
+      "docs/prd/**",
+      "docs/glossary/**",
+      "docs/plans/**",
+      "docs/go-live/**",
+      "DESIGN.md",
+      ".wip-handoff-staging/**"
+    ],
+    "writes": [
+      "docs/retros/**",
+      "docs/go-live/**",
+      "distillation-notes/**",
+      "docs/memory/**"
+    ],
+    "owns": [
+      "task_brief",
+      "gate_closeout_record",
+      "lead_to_pm_scope_discovery_handoff",
+      "risk_triage_artefact",
+      "cycle_retro",
+      "wip_handoff_acknowledgment",
+      "cycle_close_handoff",
+      "go_live_handbook_routing"
+    ]
+  },
+  "skills": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "id": "agent:remember",
+        "authorization": "triggered",
+        "triggers": [
+          "durable_lesson_or_operator_remember_directive"
+        ]
+      },
+      {
+        "id": "agent:good-morning",
+        "authorization": "triggered",
+        "triggers": [
+          "session_start"
+        ]
+      },
+      {
+        "id": "agent:coordination-wip-handoff",
+        "authorization": "triggered",
+        "triggers": [
+          "wip_handoff_intake"
+        ],
+        "rhythm_rules": {
+          "A": "acknowledge_with_green_light_authorizing_publish",
+          "B": "no_pause_proceed_unless_strategic_scope_cause",
+          "C": "acknowledge_queue_placement_only_no_publish",
+          "D": "no_pause_proceed_unless_strategic_scope_cause"
+        }
+      },
+      {
+        "id": "agent:lead-risk-triage-consolidation",
+        "authorization": "triggered",
+        "triggers": [
+          "two_or_more_escalating_review_verdicts_same_phase"
+        ]
+      },
+      {
+        "id": "agent:lead-cycle-retro-template",
+        "authorization": "triggered",
+        "triggers": [
+          "multi_gate_or_rework_cycle_close"
+        ]
+      },
+      {
+        "id": "agent:cross-model-review",
+        "authorization": "triggered",
+        "triggers": [
+          "load_bearing_coordination_artefact_validation"
+        ]
+      },
+      {
+        "id": "agent:routed-comms",
+        "authorization": "read-reference"
+      },
+      {
+        "id": "agent:coordination-closeout-templates",
+        "authorization": "read-reference"
+      },
+      {
+        "id": "agent:lead-decision-patterns",
+        "authorization": "read-reference"
+      },
+      {
+        "id": "mythical:coordination-parallel-dispatch",
+        "authorization": "triggered",
+        "triggers": [
+          "plan_intake_wave_planning",
+          "parallel_build_dispatch"
+        ]
+      },
+      {
+        "id": "mythical:implementation-planning",
+        "authorization": "triggered",
+        "triggers": [
+          "dispatch_brief_shaping"
+        ]
+      },
+      {
+        "id": "mythical:worktree-management",
+        "authorization": "triggered",
+        "triggers": [
+          "gated_worktree_cleanup_or_merge"
+        ]
+      },
+      {
+        "id": "mythical:branch-lifecycle",
+        "authorization": "triggered",
+        "triggers": [
+          "merge_and_cleanup"
+        ]
+      },
+      {
+        "id": "mythical:verification-completion",
+        "authorization": "triggered",
+        "triggers": [
+          "merge_verification"
+        ]
+      }
+    ]
+  },
+  "mcp_access": {
+    "list_is_exhaustive": true,
+    "allowed": [
+      {
+        "key": "agent-bus",
+        "authorization": "always"
+      }
+    ]
+  },
+  "git": {
+    "edit_scope": [
+      "docs/retros/**",
+      "docs/go-live/**",
+      "distillation-notes/**",
+      "docs/memory/**"
+    ],
+    "commit_scope": [
+      "docs/retros/**",
+      "docs/go-live/**",
+      "distillation-notes/**",
+      "docs/design-reviews/**",
+      "docs/adr/**",
+      "docs/design-system/**",
+      "docs/ux-reviews/**",
+      "docs/memory/**",
+      "DESIGN.md"
+    ],
+    "push_rules": {
+      "A": "push_each_irreversible_after_user_green_light",
+      "B": "push_continuous_pre_authorized_no_touchpoint",
+      "C": "batch_push_at_cycle_close_single_green_light",
+      "D": "push_on_cto_word_no_operator_wait_green_path_cto_authorized"
+    },
+    "stage_explicit_paths_only": true,
+    "forbidden": [
+      "stage_all_or_dot",
+      "edit_production_code",
+      "run_tests_builds_deploys_against_project_paths",
+      "create_or_remove_worktree_for_own_execution"
+    ]
+  },
+  "stops_and_overrides": [
+    {
+      "condition": "reviewer_critical_finding",
+      "action": "acknowledge_hardblock_and_escalate_with_verdict_record_id",
+      "override_authority": "operator",
+      "rhythm_d_route": "cto"
+    },
+    {
+      "condition": "architect_reject_or_rescope",
+      "action": "hard_block_worker_dispatch_pending_override",
+      "override_authority": "operator",
+      "rhythm_d_route": "cto"
+    },
+    {
+      "condition": "two_or_more_escalating_review_verdicts_same_phase",
+      "action": "consolidate_one_escalation_via_risk_triage_artefact",
+      "override_authority": "operator",
+      "rhythm_d_route": "cto"
+    },
+    {
+      "condition": "master_plan_affecting_scope_discovery",
+      "action": "publish_lead_to_pm_scope_discovery_handoff_no_self_rescope",
+      "override_authority": "none"
+    },
+    {
+      "condition": "unwritable_qa_floor_item",
+      "action": "gate_two_advisory_block_reconcile_before_closing",
+      "override_authority": "lead-with-acknowledgment"
+    }
+  ],
+  "doctrine_source": "doctrine/lead.md",
+  "generated_surfaces": [
+    "roles/lead-agent.md",
+    "roles/lead-agent.claude.md",
+    "roles/lead-agent.codex.md"
+  ],
+  "review_harness": true
+}

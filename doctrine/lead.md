@@ -1,0 +1,24 @@
+### Dispatch-brief header fields
+
+Every task brief you publish opens with the **process trio** — three fields that are required in every executable brief and restated one line each even when inherited unchanged, because silent inheritance is where profile, rhythm and delivery-mode drift start:
+
+- `**Authority rhythm:**` A | B | C | D
+- `**Workflow profile:**` lightweight | standard | high-risk
+- `**Delivery mode:**` ci-cd | on-main | yolo
+
+Three further fields are **conditional** — required when their condition holds, legitimately absent otherwise. Their absence is never a bounce on its own; the worker checks the condition, not the field:
+
+- `**Files touched:**` — required when ≥2 workers run concurrently in the same cycle; strongly recommended otherwise. Always this dispatch's current file set, never inherited.
+- `**Branch convention:**` feat/<ISSUE>-<slug> — the worker creates, names and reports the branch. Required for branch-carried build work; omitted for in-place docs/coordination work.
+- `**Push flow:**` pr | land-then-ack | auto → <integration branch> (from the project setting; echo, do not redefine). Carried **with** the branch convention — present when it is, omitted when it is, since with no branch there is nothing to publish.
+
+Exact spelling is load-bearing for all six: the worker validates header presence by literal label match, so a non-canonical spelling reads as a missing field — which bounces the dispatch back for the trio, and silently loses the instruction for a conditional field that was supposed to be there.
+
+### Delivery mode selection
+
+Delivery mode is a third process axis, **orthogonal** to the workflow profile (how many gates) and the authority rhythm (when the team pauses for approval). It sets **how far "done" reaches and how the work goes live** — the team-level *shipped* end-state (Level 2 of the definition of done, `ROLES.md` §"Cross-role principle — completion includes the counterpart"). **Canonical semantics — the three modes, the per-mode end-state table, the reserved-surface reconciliation, the Ops-not-a-gate rule, the `on-main` handbook, and the `yolo` execution permission — live in `ROLES.md` §"Delivery modes"; do not duplicate them here.** This section is the lead's selection/echo procedure.
+
+- **Select at cycle start** from `{ ci-cd | on-main | yolo }`. The **project default** lives in the cycle's opening artefact (the master plan when PM-scoped; else the lead master-handoff or operator-direct opening artefact) — the same opening artefact that carries the profile and rhythm. The default is a delivery *contract*: PM/operator owns changing it. You **select/echo** the active mode; you do **not** redefine the project's delivery contract.
+- **Delivery mode never relaxes gate rigor.** Gate count stays governed by the workflow profile; approval timing by the rhythm. A mode changes only the go-live mechanism and the Level-2 evidence you record (`ROLES.md` §"Delivery modes").
+- **`**Delivery mode:**` echo is mandatory** in every dispatch brief, even when inherited unchanged — restate it one line, exactly as you echo `**Authority rhythm:**` and `**Workflow profile:**` (field-label spelling canonised in §"Task brief format"). Silent inheritance produces the same disambiguation drift the rhythm/profile echoes exist to eliminate.
+- **Per-mode delivery obligations you carry** (full detail in `ROLES.md` §"Delivery modes"): under **`ci-cd`** record the CI/CD deploy/health result **read-only** — an already-produced CI/CD artefact or status link, cited by the **operator's** close-out (who authorizes the reserved landing you then request) or by your own gate close-out (a ci-cd auto-deploy landing is reserved, not green-path, and no worker ever lands anything — it carries no ci-cd citation); you never run the pipeline (§"What you do not do"); under **`on-main`** **materialize the worker-authored, worker-cross-model-validated handbook draft mechanically** — verbatim from the worker's close-out into `docs/go-live/<slug>-phase-<N>-go-live.md` (path, filename, commit, route), **no substantive edits** — then route it to the **named human operator** and confirm acknowledgment (committing alone is not delivery). If the draft needs a **material** change (a step wrong, missing, or unsafe), do **not** edit-and-ship — route the gap back to the worker, who revises **and re-validates**, so the executed handbook is always the cross-model-validated one (mechanical fixes — typos, the filename/SHA stamp — are yours); under **`yolo`** the worker's direct deploy is a reserved action it executes only on a dispatch that **cites apex authorization** — you do not green-path it, and you record its post-deploy smoke from the close-out. (Execution is gated by the worker's own contract; until that contract grants the deploy token the worker fails closed and stops-and-routes, so a `yolo` dispatch is safe regardless.)
