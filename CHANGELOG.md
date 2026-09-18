@@ -7,9 +7,17 @@ either variant can read what an upgrade brings. The format follows
 [Keep a Changelog](https://keepachangelog.com/) conventions, trimmed to what a
 content set needs.
 
-## v0.2.1 — 2026-09-18
+## v0.2.2 — 2026-09-18
 
 **A worktree caveat stopped asserting what kind of repository you are in.**
+
+> **`v0.2.1` is superseded and must not be consumed.** It carries this same change,
+> but its changelog entry cited `roles/<the worker playbook>` by path — a path the
+> **lite** variant deliberately does not have, since its playbooks sit at the tree
+> root. A consumer projecting that tag gets a lite changelog referencing a file its
+> own payload drops, and brokkr's bake closure gate refuses it. The tag cannot be
+> moved or deleted (`release-tag-immutability` forbids update and deletion), so it
+> stands as a dead release and `v0.2.2` is the one to bake.
 
 ### Changed
 - (full) The worker playbook's §"Worktree workflow" — the submodule caveat in the
