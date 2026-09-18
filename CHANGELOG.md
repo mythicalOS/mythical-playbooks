@@ -7,6 +7,23 @@ either variant can read what an upgrade brings. The format follows
 [Keep a Changelog](https://keepachangelog.com/) conventions, trimmed to what a
 content set needs.
 
+## v0.2.1 — 2026-09-18
+
+**A worktree caveat stopped asserting what kind of repository you are in.**
+
+### Changed
+- (full) `roles/worker-agent.md` §"Worktree workflow" — the submodule caveat in the
+  procedure paragraph asserted, unconditionally, that the reader's workspace composes
+  git submodules. That is a property of the project, not of the framework, and it was
+  wrong for every deployment whose repository has none. It is now a runtime probe
+  (`git submodule status` — empty output means none), matching the conditional guard
+  the same sentence already uses for "am I inside a submodule". The guidance for
+  repositories that *do* compose submodules is unchanged, as is the parent-pointer
+  ordering rule elsewhere in the same playbook, which was already conditional.
+
+  No behaviour changes for a submodule-composing deployment; a non-submodule
+  deployment stops being told to provision submodules it does not have.
+
 ## v0.2.0 — 2026-08-28
 
 **Coordination is no longer carried by files, and no agent writes to a git
