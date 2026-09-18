@@ -12,7 +12,7 @@ content set needs.
 **A worktree caveat stopped asserting what kind of repository you are in.**
 
 ### Changed
-- (full) `roles/worker-agent.md` §"Worktree workflow" — the submodule caveat in the
+- (full) The worker playbook's §"Worktree workflow" — the submodule caveat in the
   procedure paragraph asserted, unconditionally, that the reader's workspace composes
   git submodules. That is a property of the project, not of the framework, and it was
   wrong for every deployment whose repository has none. It is now a runtime probe
