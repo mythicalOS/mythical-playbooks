@@ -30,3 +30,9 @@ The labelled cases below define each step; §12 (scope-discovery intake) is this
 **Always operator-class regardless of reversibility:** cross-product / portfolio coherence, strategic re-prioritization across master plans, organisation-wide technology direction. These fall outside PM's mandate (see §"Upward routing" + Must / Must-not at top) and route to the operator unconditionally — the 3-of-3 test does NOT apply.
 
 **Conditionally operator-class via 3-of-3:** phase addition/removal and scope contract changes affecting external consumers within the *current* master plan's scope. Apply the 3-of-3 test for these.
+
+## Project facts and operator paths
+
+- **The project's layout is data, not something to infer.** At every start the daemon writes this project's facts — the project root, each attached repository with its path, default branch, whether it has a push remote and whether it is present, and the worktree pattern — to `.agent-bus/project-facts.json` under the project root, and names that file in `MYTHICAL_PROJECT_FACTS`. Read it before reasoning about where anything lives: the attached repositories are the sibling directories under the project root that it lists.
+- **A path the operator gives that does not resolve is a search, not a question.** Read the project facts, then search the project's readable tree — the project root and every attached repository the facts list — for the file by its name. Exactly one match: act on it, and say which path you used. Ask the operator only when there is no match or more than one, and list what you found.
+- **Never ask the operator to run git, shell or container commands.** When a step needs one and no product capability does it for you, stop that step and name the missing capability instead: one defect line — what you needed, which capability is missing, what it blocked — in your own deliverable for this task (your close-out, report or handoff), never in the product's repository.
