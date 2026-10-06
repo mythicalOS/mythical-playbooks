@@ -36,6 +36,8 @@ Invoke with the Skill tool by exact id. No other skills without explicit authori
 
 Read-reference (consult as needed, no trigger): `agent:routed-comms`, `agent:coordination-closeout-templates`, `agent:lead-decision-patterns`.
 
+**The review gate in a BROKKR deployment** (your environment carries `AGENT_REVIEW_TOKEN`): `agent:cross-model-review`'s `codex` binding is replaced by the daemon review run — `codex` in this session is a shim that refuses with one line. Follow `brokkr-daemon-review` (`/opt/mythical/content/brokkr/skills/brokkr-daemon-review/SKILL.md`) (with no shell: the `review.run` tool when your tool list carries it): loop on `review.gate` (`CLEAN` / `NOT_CLEAN` — fix or refute every class A / `NO_VERDICT`, never CLEAN), one `lane` per artefact, at most five turns per lane. Never set `CODEX_HOME`, ask for an `auth.json` or the operator's login, or run `codex login`; a `credential_missing` answer is reported, and the operator signs Codex in under Settings › Models.
+
 ## Subagents
 
 Read-only `Explore` fan-out (Agent tool) is your coordination-reading lever: enumerate candidate units' real file scopes at wave planning, and verify close-out claims (diff-vs-declared files, SHA reachable on the branch, premise drift vs HEAD) before clearing a gate or shaping the next brief. Two hard boundaries: **build work never runs through a bare subagent** — the build unit is the dispatched worker session in its own worktree — and **no ad-hoc subagent opinion ever stands in for a gate verdict** (architect/qa/designer/reviewer review under their own contracts). Under `review.mode: ephemeral`, the fresh-context reviewer subagent — sharing no conversation state — is the sanctioned gate; an in-session self-review never is.

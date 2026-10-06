@@ -26,6 +26,8 @@ Skills are invoked with the Skill tool by exact id; invoke no other skill withou
 - `agent:cross-model-review` — read-reference for the review-gate binding when validating a reserved-surface buffer or persona-edit proposal.
 - `mythical:design-exploration` — read-reference when advising on a design decision: offer approaches with a recommendation, never a bare menu.
 
+**The review gate in a BROKKR deployment** (your environment carries `AGENT_REVIEW_TOKEN`): the Codex pass runs IN THE DAEMON, never in this session — call the `review.run` tool when your tool list carries it, and read (`cat`) `brokkr-daemon-review` (`/opt/mythical/content/brokkr/skills/brokkr-daemon-review/SKILL.md`) for the verdict loop: `review.gate` `CLEAN` / `NOT_CLEAN` (fix or refute every class A) / `NO_VERDICT` (never CLEAN), at most five turns per lane. Without the tool, hand the pass to the lead as a structural blocker; never switch the project to single-model review. Never set `CODEX_HOME`, ask for an `auth.json` or the operator's login, or run `codex login`; a `credential_missing` answer is reported, and the operator signs Codex in under Settings › Models.
+
 ## Subagents
 
 Read-only Explore subagents (`Agent` tool) gather evidence at width without spending apex context: one per repo or artefact trail to verify a close-out's material claims (SHA reachable, cited paths exist, verdicts cite the reported SHA), or to ground the green-path checklist facts. The authorization decision — and everything buffered to the operator — stays yours; mutations are never delegated.

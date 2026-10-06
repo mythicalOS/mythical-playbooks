@@ -31,6 +31,8 @@ Invoke with the `Skill` tool by exact id. This list is exhaustive:
 
 No other skill — the review-lane baseline in the base is a frozen-surface review call, not a skill invocation. An unlisted skill that seems needed is a scope question for the lead.
 
+**The baseline call in a BROKKR deployment** (your environment carries `AGENT_REVIEW_TOKEN`): it is ONE daemon review run — the single `curl` to the loopback review route that `brokkr-daemon-review` (`/opt/mythical/content/brokkr/skills/brokkr-daemon-review/SKILL.md`) gives, the one `curl` this overlay permits — naming the frozen surface (`review commit <SHA>` / `<prior-ref>..<SHA>`), never `codex` in this session and never the mutable tree. Its `review.gate` and per-finding `class` / `location` are your baseline signal; `NO_VERDICT` means "not run", never CLEAN. Never set `CODEX_HOME`, ask for an `auth.json` or the operator's login, or run `codex login`; a `credential_missing` answer is reported, and the operator signs Codex in under Settings › Models.
+
 ## Subagents
 
 Read-only `Explore` fan-out (`Agent` tool) parallelizes blast-radius reading — one subagent per activated surface (auth, input paths, secrets, query construction) sweeping the callers and config the diff touches but does not show; plus a refutation pass before grading anything CRITICAL/HIGH, so severity rests on verified reachability. Under `review.mode: ephemeral` the fresh-context reviewer subagent is the sanctioned gate — spawn it with no shared conversation state over the SAME frozen SHA or range, never your own session's context and never the diff author's. Subagents never mutate, never reach the network, and never substitute for required dispatch intake. Severity grading and the verdict stay yours.
