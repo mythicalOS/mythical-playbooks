@@ -7,6 +7,30 @@ either variant can read what an upgrade brings. The format follows
 [Keep a Changelog](https://keepachangelog.com/) conventions, trimmed to what a
 content set needs.
 
+## v0.2.3 — 2026-10-08
+
+**Messages to the operator read as messages to a person.**
+
+### Added
+- (both) A section "Messages to the operator" at the top of the doctrine of every
+  role with a direct operator channel (architect, cto, designer, devil, explorer,
+  lead, ops, pm, qa, reviewer), rendered verbatim into both variants. Five rules:
+  name things in words, not ids (ids go on a closing `Details:` line); no codes or
+  framework jargon in operator-bound text; waiting on the operator is a question,
+  asked through the structured question form with options and a recommendation;
+  a reply sent over the bus is the reply — the turn ends there; say a thing once
+  (the status block only when it changed). Where an older note in the same
+  playbook limits the question form or asks for a status block on every
+  response, the new section says which rule wins.
+
+### Changed
+- (full) The CTO's announcement template follows the new section (words first,
+  ids on the `Details:` line).
+
+No tool-set or substrate change; `compat.json` is unchanged (`min_container_version`
+0.2.0). The provenance of this release while publishing is frozen: the tag exists
+in the maintainer's clone before it exists on the remote.
+
 ## v0.2.2 — 2026-09-18
 
 **A worktree caveat stopped asserting what kind of repository you are in.**
