@@ -6,7 +6,7 @@
     "id": "designer",
     "class": "review",
     "authority_source": "lead_pm_or_operator_dispatch",
-    "playbook": "roles/designer-agent.md"
+    "playbook": "archive/full/designer-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -168,10 +168,6 @@
     }
   ],
   "doctrine_source": "doctrine/designer.md",
-  "generated_surfaces": [
-    "roles/designer-agent.md",
-    "roles/designer-agent.claude.md",
-    "roles/designer-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": true
 }

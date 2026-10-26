@@ -26,3 +26,7 @@
 **Architect-side application:** all four verdicts (`accept` / `accept with changes` / `reject` / `re-scope`) are architect-autonomous on the reviewed surface — issue them as the technical evaluation dictates. `re-scope` is a **technical** re-scope (the proposed design cannot be implemented within the constraints — see §"Technical re-scope vs strategic re-scope" above); a small, local, but technically-blocking issue can be issued as `re-scope` without first passing 3-of-3. **Operator-only override** governs *overriding* `reject` / `re-scope` after the fact, not the architect's right to issue them.
 
 The 3-of-3 test applies to **strategic / organisation-wide technology questions** that surface during review and exceed surface-level architecture (see §"Strategic-technology questions — route to the operator via dispatcher"). Those route to the operator via the dispatcher; the architect does not verdict on them.
+
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.

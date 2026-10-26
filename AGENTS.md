@@ -24,10 +24,11 @@ is updated to match — never the reverse. See `ROLES.md` for that precedence ru
 |------|-----------|
 | `ROLES.md` | The **boundary contract** — each role's purpose, must-do, must-not. Authoritative. |
 | `README.md` | Framework overview: pipeline + review roles, the CTO apex, handoff flow. |
-| `roles/<role>-agent.md` | Base playbook per role (cto, pm, lead, worker, architect, qa, reviewer, designer, explorer, devil, ops; `spm` is a stub). |
-| `roles/<role>-agent.claude.md` / `.codex.md` | Host overlays binding a base playbook to Claude Code / Codex. Import the base; never duplicate it. |
-| `role-policies/<role>.policy.json` | **Machine-readable contract data** (authority, channels, skills, git, stops). Authoritative for the GENERATED blocks. Schema in `role-policies/schemas/`. |
-| `lite/` | The **container-lean weight** — one compact base + `.claude.md` overlay per role, and its own `lite/role-policies/`. Same roles, same boundaries, less prose. |
+| `lite/<role>-agent.md` | Base playbook per role (cto, pm, lead, worker, architect, qa, reviewer, designer, explorer, devil, ops) — the **only shipped set**. Compact by design; brevity is its value. |
+| `lite/<role>-agent.claude.md` | Host overlay binding a base playbook to Claude Code. Import the base; never duplicate it. |
+| `lite/role-policies/<role>.policy.json` | **Machine-readable contract data** for the shipped set (authority, channels, skills, git, stops). Authoritative for the GENERATED blocks. |
+| `role-policies/<role>.policy.json` | The full-set contract data, retained as **data only**: the schema home (`role-policies/schemas/`), the boundary-parity reference for `lite/role-policies/`, the source of the `ROLES.md` authority matrix, and the `spm` stub. Lists no generated surface. |
+| `archive/full/` | The archived full-weight playbooks (base + `.claude.md` + `.codex.md` per role). Nothing loads or renders from here — see `archive/full/README.md`. |
 | `doctrine/<role>.md` | **Single-source governance doctrine** per role, named by a policy's `doctrine_source` and rendered verbatim into the `doctrine <role>` block of BOTH weights. Edit here, never in a rendered block. |
 | `docs/protocols/` | Shared cross-role operational contracts. Use these for repeated mechanics — the coordination-record substrate (`coordination-records.md`), delivery + authority rhythms (`routing-and-authority.md`), reasoning discipline, modularity rules — instead of duplicating the full procedure in every role surface. |
 | `scripts/` | The render/validate toolchain (below). |
@@ -55,10 +56,11 @@ command execution** (the read-only review roles and cto must not; record a forbi
 *not-run due to role boundary*). Each script `cd`s to the repo root itself.
 
 - `scripts/render-contracts.sh` — regenerate the GENERATED blocks inside the surfaces named by each
-  policy's `generated_surfaces`. **Both policy sets drive it** (`role-policies/` and
-  `lite/role-policies/`), and every surface path is repo-root-relative in both. Block types:
+  policy's `generated_surfaces`. **Both policy sets are read** (`role-policies/` and
+  `lite/role-policies/`), but only the lite set lists surfaces — the full set is data-only since
+  its prose weight was archived — and every surface path is repo-root-relative. Block types:
   `contract <role>`, `allowed-skills <role>`, and `doctrine <role>` (the verbatim body of the
-  policy's `doctrine_source`). Run after editing a policy JSON, a `doctrine/*.md`, or a generated
+  policy's `doctrine_source`); only `doctrine` has a host in the shipped set. Run after editing a policy JSON, a `doctrine/*.md`, or a generated
   surface. It runs in **two passes** — everything is validated before anything is written, and each
   rewrite is staged beside its target and installed only if the whole run rendered cleanly, so a
   refusal (or a mid-run write failure) leaves the corpus untouched rather than half-rendered.
@@ -80,9 +82,10 @@ command execution** (the read-only review roles and cto must not; record a forbi
   file's `lite_omissions`), plus the semantic lint (closed
   `must_route`/`override_authority`/`rhythm_d_route` vocabularies, `push_rules` rhythm coverage,
   duplicate detection), plus — under `--substrate` — **substrate parity over the PROSE surfaces**:
-  no retired record-directory / routing-token grammar in `roles/**.md` or `lite/**.md`
-  (`SUBSTRATE-LEGACY`); per-role tool-set **equality** between the weights, each side the union over
-  the role's base file **and its shipped overlays** (`SUBSTRATE-SET`); a closed daemon-tool
+  no retired record-directory / routing-token grammar in `lite/**.md` (`SUBSTRATE-LEGACY`);
+  per-role tool-set **equality** between the weights, each side the union over the role's base
+  file **and its shipped overlays** (`SUBSTRATE-SET` — dormant with one shipped weight, still
+  proven by the selftest); a closed daemon-tool
   vocabulary (`SUBSTRATE-VOCAB`); and a role-aware permit rule derived from the role manifest —
   only the roles the daemon admits at the socket may be taught `git.request_landing` /
   `git.push_branch` (`SUBSTRATE-ROLE`); and the four ARTEFACT-keyed rules, which police what a

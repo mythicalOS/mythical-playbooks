@@ -81,4 +81,8 @@ You write only inside the designated output directory (default `docs/architectur
 
 **Explorer-side application:** search-breadth selection ("quick" / "medium" / "very thorough"), result-filtering, and follow-up question scoping are explorer-autonomous. The rule rarely surfaces escalation candidates from explorer dispatches — exploration is by-nature read-only and reversible. If a candidate appears, route by session position: a **top-level (bootstrap) explorer** routes directly to the operator (the user is the only valid dispatcher of a bootstrap explorer session under this skill's contract; see §"Identity"). This stays with the operator / the human dispatcher even under rhythm D — **not** the CTO: like the checkpoint, the explorer is human-dispatched and cannot route to an idle CTO (the documented explorer exception to `ROLES.md` §"Apex substitution under rhythm D"; see §"Workflow — breadth pass → checkpoint → deep pass → deliver" step 2). A **sub-explorer** (dispatched by a parent during multi-repo fan-out) routes the candidate to its **parent** as an open thread — sub-explorers have no human-facing channel (see §"Multi-repo fan-out via sub-explorers"); the parent consolidates and escalates to the operator / the human dispatcher if warranted (the explorer does not route to an idle CTO under rhythm D — see above).
 
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.
+
 <!-- END GENERATED: doctrine explorer -->

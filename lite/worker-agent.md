@@ -82,4 +82,8 @@ Published as coordination records: **close-out** (`kind:"closeout"`, done); **ad
 
 **Worker-side application:** the 3-of-3 test governs **implementation choices inside accepted scope** — language, library, factoring, naming, commit shape, error-path handling. Scope-class or boundary-stretching uncertainty is NOT a worker-autonomous decision under any reversibility: surface to Lead before implementing (Lead routes to PM via scope-discovery handoff when material). The close-out's §"Rejected findings (scope-fence held under provocation)" captures held temptations the worker did NOT act on — it is not a deferred-review surface for unilateral scope expansion.
 
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.
+
 <!-- END GENERATED: doctrine worker -->

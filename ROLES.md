@@ -474,6 +474,6 @@ Verify / Reach / Notify-on-change are **Level-1** ("landed"). **Ship is Level-2*
 ## Cross-references
 
 - `README.md` — operational overview (pipeline, review-role activation, workflow profiles, artefact paths).
-- `roles/<role>-agent.md` — the role's base playbook (role purpose + Must/Must-not anchored at the top of each).
-- `roles/<role>-agent.claude.md` / `roles/<role>-agent.codex.md` — platform overlays.
+- `lite/<role>-agent.md` — the role's base playbook (role purpose + role contract anchored at the top of each).
+- `lite/<role>-agent.claude.md` — the Claude Code overlay. (The archived full set under `archive/full/` also carried `.codex.md` overlays; nothing loads from there.)
 - The distillation methodology (maintained with the project) — promotion criteria for moving SPM beyond stub and re-distilling the CTO toward v1.x.

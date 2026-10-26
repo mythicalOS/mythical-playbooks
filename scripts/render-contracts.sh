@@ -14,16 +14,18 @@ set -euo pipefail
 #   allowed-skills <role>  — one bullet per skills.allowed[] entry
 #   doctrine <role>        — the verbatim body of the policy's doctrine_source
 #
-# Both policy sets drive rendering: the full set (role-policies/) and the
-# container-lean set (lite/role-policies/). Every generated_surfaces entry is
-# REPO-ROOT-RELATIVE in both sets, so a lite policy names `lite/<role>-agent.md`.
-# That is what lets ONE doctrine file render into both weights.
+# Both policy sets are read. The shipped set (lite/role-policies/) names its
+# surfaces as REPO-ROOT-RELATIVE paths (`lite/<role>-agent.md`). The full set
+# (role-policies/) is DATA-ONLY: its prose weight was archived to archive/full/
+# (see the README there), it lists no surfaces and renders nothing, and it is
+# kept as the schema home, the boundary-parity reference and the matrix source.
 #
 # The renderer NEVER creates files and NEVER touches a file that is not listed
-# in some policy's generated_surfaces. A policy with generated_surfaces:[] renders
-# nothing — and is REFUSED, because every policy must declare a doctrine_source
-# and that doctrine must have exactly one host (see the block-host counts in
-# render_pass); a policy that lists no surface has nowhere to render it.
+# in some policy's generated_surfaces. A LITE policy with generated_surfaces:[]
+# renders nothing — and is REFUSED, because every policy must declare a
+# doctrine_source and that doctrine must have exactly one host in the shipped
+# weight (see the block-host counts in render_pass). A data-only policy in
+# role-policies/ is the one sanctioned surface-less shape.
 
 MODE="render"
 ROOT=""
@@ -824,7 +826,7 @@ if [ "$MODE" = "selftest" ]; then
   st_stage() {  # fresh scratch copy of everything the renderer reads or writes
     rm -rf "$ST_TMP/repo"
     mkdir -p "$ST_TMP/repo"
-    ( cd "$ST_SRC" && tar cf - role-policies lite roles doctrine ROLES.md ) \
+    ( cd "$ST_SRC" && tar cf - role-policies lite doctrine ROLES.md ) \
       | ( cd "$ST_TMP/repo" && tar xf - )
   }
   st_digest() { python3 -c 'import hashlib,sys,os
@@ -904,37 +906,44 @@ print(h.hexdigest())' "$1"; }
 
   # A duplicated BEGIN is ambiguous, not a rendering decision.
   st_stage
-  st_mutate roles/qa-agent.md python3 -c \
-    'p="roles/qa-agent.md";t=open(p).read();i=t.index("<!-- BEGIN GENERATED: doctrine");j=t.index("\n",i)+1;open(p,"w").write(t[:j]+t[i:j]+t[j:])'
+  st_mutate lite/qa-agent.md python3 -c \
+    'p="lite/qa-agent.md";t=open(p).read();i=t.index("<!-- BEGIN GENERATED: doctrine");j=t.index("\n",i)+1;open(p,"w").write(t[:j]+t[i:j]+t[j:])'
   st_expect "duplicated BEGIN marker refused" 1 "MARKER PAIR BROKEN" --unchanged
 
-  # Deleting a whole doctrine block must not pass just because the SAME surface
-  # still carries its contract marker.
+  # Deleting a whole doctrine block must not pass as "this role simply has no
+  # doctrine": the policy lists the surface, so the block must be there.
   st_stage
-  st_mutate roles/qa-agent.md python3 -c \
-    'p="roles/qa-agent.md";t=open(p).read();a=t.index("<!-- BEGIN GENERATED: doctrine");e="<!-- END GENERATED: doctrine qa -->";b=t.index(e)+len(e);open(p,"w").write(t[:a]+t[b:])'
+  st_mutate lite/qa-agent.md python3 -c \
+    'p="lite/qa-agent.md";t=open(p).read();a=t.index("<!-- BEGIN GENERATED: doctrine");e="<!-- END GENERATED: doctrine qa -->";b=t.index(e)+len(e);open(p,"w").write(t[:a]+t[b:])'
   st_expect "deleted doctrine block refused" 1 "DOCTRINE BLOCK HOSTS" --unchanged
+
+  # The data-only exemption is keyed on the SET: a lite policy emptied of its
+  # surfaces is a doctrine dropped from the shipped weight, not a data-only policy.
+  st_stage
+  st_mutate lite/role-policies/qa.policy.json python3 -c \
+    'import json;p="lite/role-policies/qa.policy.json";d=json.load(open(p));d["generated_surfaces"]=[];json.dump(d,open(p,"w"),indent=2)'
+  st_expect "a lite policy emptied of its surfaces refused" 1 "DOCTRINE BLOCK HOSTS" --unchanged
 
   # A near-miss marker must be REFUSED, not silently "absent": a prefix match
   # would accept `doctrine qa-extra` AS the `doctrine qa` marker.
   st_stage
-  st_mutate roles/qa-agent.md python3 -c \
-    'p="roles/qa-agent.md";t=open(p).read();open(p,"w").write(t.replace("<!-- BEGIN GENERATED: doctrine qa ","<!-- BEGIN GENERATED: doctrine qa-extra ",1))'
+  st_mutate lite/qa-agent.md python3 -c \
+    'p="lite/qa-agent.md";t=open(p).read();open(p,"w").write(t.replace("<!-- BEGIN GENERATED: doctrine qa ","<!-- BEGIN GENERATED: doctrine qa-extra ",1))'
   st_expect "malformed BEGIN marker refused" 1 "MARKER MALFORMED" --unchanged
 
   # Two markers on ONE line: a line COUNT would read this as a single marker.
   st_stage
-  st_mutate roles/qa-agent.md python3 -c \
-    'p="roles/qa-agent.md";t=open(p).read();m="<!-- BEGIN GENERATED: doctrine qa -->";i=t.index("<!-- BEGIN GENERATED: doctrine qa ");j=t.index("\n",i);open(p,"w").write(t[:j]+" "+m+t[j:])'
+  st_mutate lite/qa-agent.md python3 -c \
+    'p="lite/qa-agent.md";t=open(p).read();m="<!-- BEGIN GENERATED: doctrine qa -->";i=t.index("<!-- BEGIN GENERATED: doctrine qa ");j=t.index("\n",i);open(p,"w").write(t[:j]+" "+m+t[j:])'
   st_expect "two BEGIN markers on one line refused" 1 "MARKER MALFORMED" --unchanged
 
   # Dropping the DECLARATION as well as the block must not read as "this role
-  # simply has no doctrine" — every policy declares one, in both weights.
+  # simply has no doctrine" — every policy declares one, in both sets.
   st_stage
-  st_mutate role-policies/qa.policy.json python3 -c \
-    'import json;p="role-policies/qa.policy.json";d=json.load(open(p));del d["doctrine_source"];json.dump(d,open(p,"w"),indent=2)'
-  st_mutate roles/qa-agent.md python3 -c \
-    'p="roles/qa-agent.md";t=open(p).read();a=t.index("<!-- BEGIN GENERATED: doctrine");e="<!-- END GENERATED: doctrine qa -->";b=t.index(e)+len(e);open(p,"w").write(t[:a]+t[b:])'
+  st_mutate lite/role-policies/qa.policy.json python3 -c \
+    'import json;p="lite/role-policies/qa.policy.json";d=json.load(open(p));del d["doctrine_source"];json.dump(d,open(p,"w"),indent=2)'
+  st_mutate lite/qa-agent.md python3 -c \
+    'p="lite/qa-agent.md";t=open(p).read();a=t.index("<!-- BEGIN GENERATED: doctrine");e="<!-- END GENERATED: doctrine qa -->";b=t.index(e)+len(e);open(p,"w").write(t[:a]+t[b:])'
   st_expect "undeclared doctrine_source refused" 1 "DOCTRINE SOURCE UNDECLARED" --unchanged
 
   # WHOLE-RUN refusal: a STALE block that would render fine, plus a refusal
@@ -975,34 +984,28 @@ ls.insert(j+1,"```\n");ls.insert(i,"```historical\n");open(p,"w").writelines(ls)
   st_expect "symlinked surface refused" 1 "SURFACE SYMLINK" --unchanged
 
   # A run-phase WRITE failure must discard every staged rewrite, not leave the
-  # corpus half-rendered: preflight passes, an early surface renders, and a
-  # later unwritable directory aborts the run.
+  # corpus half-rendered: preflight passes, the lite surfaces stage, and the
+  # matrix host — rendered last, in an unwritable root — aborts the run.
   st_stage
-  st_mutate roles/architect-agent.md python3 -c \
-    'p="roles/architect-agent.md";ls=open(p).read().splitlines(True)
+  st_mutate lite/architect-agent.md python3 -c \
+    'p="lite/architect-agent.md";ls=open(p).read().splitlines(True)
 i=[n for n,l in enumerate(ls) if l.startswith("<!-- BEGIN GENERATED: doctrine")][0]
 ls.insert(i+1,"STALE INJECTED LINE\n");open(p,"w").writelines(ls)'
-  chmod 0555 "$ST_TMP/repo/lite"
+  chmod 0555 "$ST_TMP/repo"
   st_expect "a run-phase write failure installs NOTHING" 1 "RENDER FAILED" --unchanged
-  chmod 0755 "$ST_TMP/repo/lite"
+  chmod 0755 "$ST_TMP/repo"
 
-  # Deleting only the BEGIN leaves a valid orphan END; the surface's OTHER block
-  # would otherwise satisfy `found` and carry the run green.
+  # Deleting only the BEGIN leaves a valid orphan END; the pair rule must fire
+  # on EITHER marker, or the surface would read as merely "no block here".
   st_stage
-  st_mutate roles/qa-agent.md python3 -c \
-    'p="roles/qa-agent.md";ls=open(p).read().splitlines(True);open(p,"w").writelines([l for l in ls if not l.startswith("<!-- BEGIN GENERATED: contract")])'
+  st_mutate lite/qa-agent.md python3 -c \
+    'p="lite/qa-agent.md";ls=open(p).read().splitlines(True);open(p,"w").writelines([l for l in ls if not l.startswith("<!-- BEGIN GENERATED: doctrine")])'
   st_expect "orphan END (BEGIN deleted) refused" 1 "MARKER PAIR BROKEN" --unchanged
 
-  # ... and deleting BOTH markers must not simply make the block disappear.
-  st_stage
-  st_mutate roles/qa-agent.md python3 -c \
-    'p="roles/qa-agent.md";t=open(p).read();a=t.index("<!-- BEGIN GENERATED: contract");e="<!-- END GENERATED: contract qa -->";b=t.index(e)+len(e);open(p,"w").write(t[:a]+t[b:])'
-  st_expect "whole contract block deleted refused" 1 "CONTRACT BLOCK HOSTS" --unchanged
-
-  st_stage
-  st_mutate roles/qa-agent.claude.md python3 -c \
-    'p="roles/qa-agent.claude.md";t=open(p).read();a=t.index("<!-- BEGIN GENERATED: allowed-skills");e="<!-- END GENERATED: allowed-skills qa -->";b=t.index(e)+len(e);open(p,"w").write(t[:a]+t[b:])'
-  st_expect "whole allowed-skills block deleted refused" 1 "ALLOWED-SKILLS BLOCK HOSTS" --unchanged
+  # The contract and allowed-skills block types have no host in the shipped
+  # weight (the full weight that carried them is archived under archive/full/);
+  # their refusal cases retired with it. The renderers stay for a weight that
+  # ships host overlays, and the host-count rules above still bind such a policy.
 
   # CommonMark: a closing fence must be at least as long as its opener. A
   # scanner that closes a ```` fence on an inner ``` reads everything after it
@@ -1019,39 +1022,10 @@ ls.insert(j+1,"````\n");ls.insert(i,"```\n");ls.insert(i,"````historical\n");ope
   # unparseable — `install_staged` and `discard_staged` both drop it, which
   # silently skips the install AND leaks the stage file. Refuse the path.
   st_stage
-  st_mutate role-policies/qa.policy.json python3 -c \
-    'import json;p="role-policies/qa.policy.json";d=json.load(open(p));d["generated_surfaces"].append("roles/tab\there.md");json.dump(d,open(p,"w"),indent=2)'
-  printf '# fixture\n' > "$ST_TMP/repo/roles/tab${TAB}here.md"
+  st_mutate lite/role-policies/qa.policy.json python3 -c \
+    'import json;p="lite/role-policies/qa.policy.json";d=json.load(open(p));d["generated_surfaces"].append("lite/tab\there.md");json.dump(d,open(p,"w"),indent=2)'
+  printf '# fixture\n' > "$ST_TMP/repo/lite/tab${TAB}here.md"
   st_expect "a tab in a generated surface path refused" 1 "SURFACE PATH" --unchanged
-
-  # Two well-formed pairs that INTERLEAVE. Every per-key rule passes, and then
-  # the contract splice — which replaces everything between ITS markers — deletes
-  # the doctrine BEGIN. Measured before the disjointness check: exit 0, no
-  # diagnostic, doctrine BEGIN gone, doctrine never rendered again.
-  st_stage
-  st_mutate roles/qa-agent.md python3 -c \
-    'p="roles/qa-agent.md";ls=open(p).read().splitlines(True)
-db=[n for n,l in enumerate(ls) if l.startswith("<!-- BEGIN GENERATED: doctrine")][0]
-m=ls.pop(db)
-ce=[n for n,l in enumerate(ls) if l.startswith("<!-- END GENERATED: contract")][0]
-ls.insert(ce,m);open(p,"w").writelines(ls)'
-  st_expect "interleaved marker pairs refused (silent block erasure)" 1 \
-    "MARKER PAIRS OVERLAP" --unchanged
-
-  # Block PLACEMENT, not only block COUNT: swapping the contract onto an overlay
-  # and that overlay's allowed-skills onto the base leaves both totals correct
-  # while every reader looks in the wrong file.
-  st_stage
-  st_mutate2 roles/qa-agent.md roles/qa-agent.claude.md python3 -c \
-    'b=open("roles/qa-agent.md").read(); o=open("roles/qa-agent.claude.md").read()
-ce_t="<!-- END GENERATED: contract qa -->"; se_t="<!-- END GENERATED: allowed-skills qa -->"
-cb=b.index("<!-- BEGIN GENERATED: contract"); ce=b.index(ce_t)+len(ce_t)
-sb=o.index("<!-- BEGIN GENERATED: allowed-skills"); se=o.index(se_t)+len(se_t)
-contract=b[cb:ce]; skills=o[sb:se]
-open("roles/qa-agent.md","w").write(b[:cb]+skills+b[ce:])
-open("roles/qa-agent.claude.md","w").write(o[:sb]+contract+o[se:])'
-  st_expect "contract/allowed-skills swapped between base and overlay refused" 1 \
-    "CONTRACT BLOCK HOSTS" --unchanged
 
   # A block BODY is data. A doctrine source carrying its own GENERATED marker
   # line renders at exit 0 and leaves a duplicated pair behind, refused only by
@@ -1062,37 +1036,32 @@ open("roles/qa-agent.claude.md","w").write(o[:sb]+contract+o[se:])'
   st_expect "doctrine source carrying a GENERATED marker refused" 1 \
     "DOCTRINE SOURCE MARKER" --unchanged
 
-  # ... and the same class through a NON-doctrine body: a policy field value that
-  # contains a marker string is rendered into the contract table. Preflight
-  # cannot see it (it is not on disk yet), so only the post-render check of the
-  # STAGED copy catches it, before anything is installed.
+  # Doctrine PLACEMENT: moving the block to a host overlay — a file no policy
+  # lists — keeps the file count at one while the base, the only listed host,
+  # loses it.
   st_stage
-  st_mutate role-policies/qa.policy.json python3 -c \
-    'import json;p="role-policies/qa.policy.json";d=json.load(open(p));d["authority"]["forbidden"].append("<!-- BEGIN GENERATED: doctrine qa -->");json.dump(d,open(p,"w"),indent=2)'
-  st_expect "a rendered body carrying a GENERATED marker installs nothing" 1 \
-    "RENDERED BODY BROKE THE MARKERS" --unchanged
-
-  # Doctrine PLACEMENT: moving the block to a host overlay keeps the total at
-  # one while the base playbook — and therefore every other host — loses it.
-  st_stage
-  st_mutate2 roles/qa-agent.md roles/qa-agent.codex.md python3 -c \
-    'b=open("roles/qa-agent.md").read()
+  st_mutate2 lite/qa-agent.md lite/qa-agent.claude.md python3 -c \
+    'b=open("lite/qa-agent.md").read()
 e="<!-- END GENERATED: doctrine qa -->"; i=b.index("<!-- BEGIN GENERATED: doctrine"); j=b.index(e)+len(e)
-open("roles/qa-agent.md","w").write(b[:i]+b[j:])
-open("roles/qa-agent.codex.md","a").write("\n"+b[i:j]+"\n")'
+open("lite/qa-agent.md","w").write(b[:i]+b[j:])
+open("lite/qa-agent.claude.md","a").write("\n"+b[i:j]+"\n")'
   st_expect "doctrine block moved to a host overlay refused" 1 \
     "DOCTRINE BLOCK HOSTS" --unchanged
 
-  # The MATRIX body is rendered from policy fields too, and ROLES.md was the one
-  # write path outside the staged-verification guarantee. `reserved_surface`
-  # feeds the matrix ONLY, so this isolates that path.
+  # A NON-doctrine body carrying a marker: the matrix is rendered from policy
+  # fields, and ROLES.md was the one write path outside the staged-verification
+  # guarantee. Preflight cannot see the marker (it is not on disk yet), so only
+  # the post-render check of the STAGED copy catches it, before anything is
+  # installed. `reserved_surface` feeds the matrix ONLY, so this isolates that
+  # path — and, with no contract table hosted anywhere, it is the one body of
+  # this class the shipped corpus still renders.
   st_stage
   st_mutate role-policies/cto.policy.json python3 -c \
     'import json;p="role-policies/cto.policy.json";d=json.load(open(p));d["authority"]["reserved_surface"].append("<!-- BEGIN GENERATED: authority-matrix -->");json.dump(d,open(p,"w"),indent=2)'
   st_expect "a marker injected into the authority matrix installs nothing" 1 \
     "RENDERED BODY BROKE THE MARKERS" --unchanged
 
-  EXPECTED_ST_CASES=27
+  EXPECTED_ST_CASES=23
   if [ "$st_cases" -ne "$EXPECTED_ST_CASES" ]; then
     echo "RENDER-SELFTEST FAIL: ran $st_cases case(s), expected $EXPECTED_ST_CASES — update the literal deliberately" >&2
     exit 1
@@ -1158,6 +1127,19 @@ render_pass() {
     # disappear — the surface's remaining block satisfies `found` and the run
     # stays green. (A weight that ships no overlays — the container-lean set,
     # and the spm stub — renders neither, by design, and is not held to it.)
+    # DATA-ONLY policy. The full-set policies (role-policies/) list no surface
+    # since the full prose weight was archived (archive/full/README.md): they are
+    # retained as contract data — the schema home, the boundary-parity reference
+    # for lite/role-policies/, the authority-matrix source — and have no block to
+    # host. The exemption is keyed on the SET, never on an empty list alone: a
+    # lite policy emptied of its surfaces is a doctrine silently dropped from the
+    # shipped weight, and is refused below exactly as before.
+    local data_only=0
+    case "$policy" in
+      lite/*) ;;
+      *) [ "$(jq -r '.generated_surfaces | length' "$policy")" -eq 0 ] && data_only=1 ;;
+    esac
+
     if [ "$overlay_surfaces" -gt 0 ]; then
       if [ "$contract_hosts" -ne 1 ] || [ "$contract_base_hosts" -ne 1 ]; then
         echo "CONTRACT BLOCK HOSTS $policy: $contract_hosts contract block(s), $contract_base_hosts of them on a base surface (want exactly 1, on the base)"
@@ -1179,9 +1161,9 @@ render_pass() {
     if [ -z "$dsrc" ]; then
       echo "DOCTRINE SOURCE UNDECLARED $policy: every role policy must declare doctrine_source"
       fail=1
-    elif [ "$doctrine_hosts" -ne 1 ] || [ "$doctrine_base_hosts" -ne 1 ]; then
+    elif [ "$data_only" -eq 0 ] && { [ "$doctrine_hosts" -ne 1 ] || [ "$doctrine_base_hosts" -ne 1 ]; }; then
       # A declared doctrine must have a HOME, exactly one per policy, and that
-      # home must be the BASE playbook. Zero = the block was deleted and the
+      # home must be the BASE playbook. (A data-only policy has none, by design.) Zero = the block was deleted and the
       # doctrine silently vanished from that weight. More than one = the same
       # doctrine rendered twice in one weight. One, but on a host overlay = the
       # base playbook — and therefore every other host — silently lost it, while

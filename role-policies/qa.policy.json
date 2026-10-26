@@ -6,7 +6,7 @@
     "id": "qa",
     "class": "review",
     "authority_source": "lead_dispatch",
-    "playbook": "roles/qa-agent.md"
+    "playbook": "archive/full/qa-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -153,10 +153,6 @@
     }
   ],
   "doctrine_source": "doctrine/qa.md",
-  "generated_surfaces": [
-    "roles/qa-agent.md",
-    "roles/qa-agent.claude.md",
-    "roles/qa-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": true
 }

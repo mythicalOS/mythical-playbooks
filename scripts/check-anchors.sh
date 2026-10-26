@@ -12,7 +12,7 @@
 # grep is robust regardless of corpus size / shell printf limits.
 set -uo pipefail
 cd "$(git rev-parse --show-toplevel)"
-files=$(ls ./roles/*-agent*.md ROLES.md README.md 2>/dev/null)
+files=$(ls ./lite/*-agent*.md ROLES.md README.md 2>/dev/null)
 
 # --- mythical-skills locator for namespaced (mythical: / agent:) anchors (§C.2) ----------------
 # A `mythical:<skill> §"…"` or `agent:<skill> §"…"` citation in a PLAYBOOK resolves to a section in <skill>'s OWN

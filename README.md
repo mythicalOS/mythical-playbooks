@@ -70,8 +70,10 @@ deliberately stable is **intent at the boundaries** — a role's purpose and its
 | Path | What it is |
 |------|------------|
 | [`ROLES.md`](ROLES.md) | The boundary contract — authoritative. |
-| `roles/<role>-agent.md` `.claude.md` `.codex.md` | Base playbook per role + host overlays. |
-| `role-policies/<role>.policy.json` | Machine-readable contract data; generated blocks render from it. |
+| `lite/<role>-agent.md` `.claude.md` | Base playbook per role + Claude Code overlay — the shipped set. |
+| `lite/role-policies/<role>.policy.json` | Machine-readable contract data; generated blocks render from it. |
+| `role-policies/<role>.policy.json` | The full-set contract data, kept as data only (schema, parity reference, authority matrix). |
+| `archive/full/` | The archived full-weight playbooks; nothing loads from here (see its README). |
 | [`docs/framework.md`](docs/framework.md) | How work flows: profiles, gates, cross-model review, artefacts, usage. |
 | `docs/protocols/` | Shared cross-role mechanics (the coordination-record substrate, delivery + authority, discipline, modularity). |
 | `scripts/` | The bash render/validate toolchain. |

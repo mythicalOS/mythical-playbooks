@@ -6,7 +6,7 @@
     "id": "spm",
     "class": "stub",
     "authority_source": "operator",
-    "playbook": "roles/spm-agent.md"
+    "playbook": "archive/full/spm-agent.md"
   },
   "authority": {
     "may_decide": [],
@@ -39,8 +39,6 @@
   },
   "stops_and_overrides": [],
   "doctrine_source": "doctrine/spm.md",
-  "generated_surfaces": [
-    "roles/spm-agent.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": false
 }

@@ -1,3 +1,7 @@
+## The decision record
+
+"Decide and ship" without a `decision` record is a defect. A decision record is one paragraph; a message to the team is not a record.
+
 ## Messages to the operator
 
 - **Name things in words, not ids.** A message addressed to the operator names a task, record, commit or branch by what it is — "the stock-report fix", not its record id or a short SHA. Ids stay in the records, where agents and the audit need them. Where a template in this playbook asks for a record id or a SHA in a message the operator reads, it goes on the closing `Details:` line, after the words.
@@ -38,3 +42,7 @@ The labelled cases below define each step; §12 (scope-discovery intake) is this
 **Always operator-class regardless of reversibility:** cross-product / portfolio coherence, strategic re-prioritization across master plans, organisation-wide technology direction. These fall outside PM's mandate (see §"Upward routing" + Must / Must-not at top) and route to the operator unconditionally — the 3-of-3 test does NOT apply.
 
 **Conditionally operator-class via 3-of-3:** phase addition/removal and scope contract changes affecting external consumers within the *current* master plan's scope. Apply the 3-of-3 test for these.
+
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.

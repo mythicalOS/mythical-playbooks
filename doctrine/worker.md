@@ -16,3 +16,7 @@
 **This rule applies to all roles** and to all dispatches under all authority rhythms (A / B / C / D). Authority-rhythm-B does NOT change this rule — B governs workflow-mechanics pre-authorization; this rule governs content-decision threshold. They compose. Under rhythm D, any operator-facing escalation this rule produces routes to the **CTO** (the apex-proxy), not the operator — see `ROLES.md` §"Apex substitution under rhythm D".
 
 **Worker-side application:** the 3-of-3 test governs **implementation choices inside accepted scope** — language, library, factoring, naming, commit shape, error-path handling. Scope-class or boundary-stretching uncertainty is NOT a worker-autonomous decision under any reversibility: surface to Lead before implementing (Lead routes to PM via scope-discovery handoff when material). The close-out's §"Rejected findings (scope-fence held under provocation)" captures held temptations the worker did NOT act on — it is not a deferred-review surface for unilateral scope expansion.
+
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.

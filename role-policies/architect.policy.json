@@ -6,7 +6,7 @@
     "id": "architect",
     "class": "review",
     "authority_source": "lead_pm_or_operator_dispatch",
-    "playbook": "roles/architect-agent.md"
+    "playbook": "archive/full/architect-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -179,10 +179,6 @@
     }
   ],
   "doctrine_source": "doctrine/architect.md",
-  "generated_surfaces": [
-    "roles/architect-agent.md",
-    "roles/architect-agent.claude.md",
-    "roles/architect-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": true
 }

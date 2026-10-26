@@ -6,7 +6,7 @@
     "id": "devil",
     "class": "sparring",
     "authority_source": "operator_only_runtime_bind",
-    "playbook": "roles/devil-agent.md"
+    "playbook": "archive/full/devil-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -139,10 +139,6 @@
     }
   ],
   "doctrine_source": "doctrine/devil.md",
-  "generated_surfaces": [
-    "roles/devil-agent.md",
-    "roles/devil-agent.claude.md",
-    "roles/devil-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": false
 }

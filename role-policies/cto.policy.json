@@ -6,7 +6,7 @@
     "id": "cto",
     "class": "apex-proxy",
     "authority_source": "operator_strategic_apex_proxy",
-    "playbook": "roles/cto-agent.md"
+    "playbook": "archive/full/cto-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -247,10 +247,6 @@
     }
   ],
   "doctrine_source": "doctrine/cto.md",
-  "generated_surfaces": [
-    "roles/cto-agent.md",
-    "roles/cto-agent.claude.md",
-    "roles/cto-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": true
 }

@@ -6,7 +6,7 @@
     "id": "lead",
     "class": "orchestration",
     "authority_source": "operator_or_pm_handoff",
-    "playbook": "roles/lead-agent.md"
+    "playbook": "archive/full/lead-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -295,10 +295,6 @@
     }
   ],
   "doctrine_source": "doctrine/lead.md",
-  "generated_surfaces": [
-    "roles/lead-agent.md",
-    "roles/lead-agent.claude.md",
-    "roles/lead-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": true
 }

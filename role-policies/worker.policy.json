@@ -6,7 +6,7 @@
     "id": "worker",
     "class": "execution",
     "authority_source": "lead_dispatch",
-    "playbook": "roles/worker-agent.md"
+    "playbook": "archive/full/worker-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -277,10 +277,6 @@
     }
   ],
   "doctrine_source": "doctrine/worker.md",
-  "generated_surfaces": [
-    "roles/worker-agent.md",
-    "roles/worker-agent.claude.md",
-    "roles/worker-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": true
 }

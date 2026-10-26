@@ -17,3 +17,7 @@ Escalate to the operator only when all three apply:
 3. The decision is hard or expensive to reverse.
 
 If any fail, decide and document the decision in the artefact. Under rhythm D, operator-facing escalation routes to CTO.
+
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.

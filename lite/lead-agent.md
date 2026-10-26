@@ -63,6 +63,14 @@ Yours: task briefs (`kind:"task"`), gate close-outs (`kind:"closeout"` — the w
 
 <!-- BEGIN GENERATED: doctrine lead (source: doctrine/lead.md — do not hand-edit) -->
 
+### Questions only the operator can answer
+
+Any question that only the operator can answer goes to the operator in the structured question form, before you dispatch work that depends on it. Never ask the team to guess. When you accept a brief, the security and compliance checks you must run are the ones listed in the brief by the daemon; you do not fetch lists from the web.
+
+### The decision record
+
+"Decide and ship" without a `decision` record is a defect. A decision record is one paragraph; a message to the team is not a record.
+
 ### Messages to the operator
 
 - **Name things in words, not ids.** A message addressed to the operator names a task, record, commit or branch by what it is — "the stock-report fix", not its record id or a short SHA. Ids stay in the records, where agents and the audit need them. Where a template in this playbook asks for a record id or a SHA in a message the operator reads, it goes on the closing `Details:` line, after the words.
@@ -95,5 +103,9 @@ Delivery mode is a third process axis, **orthogonal** to the workflow profile (h
 - **Delivery mode never relaxes gate rigor.** Gate count stays governed by the workflow profile; approval timing by the rhythm. A mode changes only the go-live mechanism and the Level-2 evidence you record (`ROLES.md` §"Delivery modes").
 - **`**Delivery mode:**` echo is mandatory** in every dispatch brief, even when inherited unchanged — restate it one line, exactly as you echo `**Authority rhythm:**` and `**Workflow profile:**` (field-label spelling canonised in §"Task brief format"). Silent inheritance produces the same disambiguation drift the rhythm/profile echoes exist to eliminate.
 - **Per-mode delivery obligations you carry** (full detail in `ROLES.md` §"Delivery modes"): under **`ci-cd`** record the CI/CD deploy/health result **read-only** — an already-produced CI/CD artefact or status link, cited by the **operator's** close-out (who authorizes the reserved landing you then request) or by your own gate close-out (a ci-cd auto-deploy landing is reserved, not green-path, and no worker ever lands anything — it carries no ci-cd citation); you never run the pipeline (§"What you do not do"); under **`on-main`** **materialize the worker-authored, worker-cross-model-validated handbook draft mechanically** — verbatim from the worker's close-out into `docs/go-live/<slug>-phase-<N>-go-live.md` (path, filename, commit, route), **no substantive edits** — then route it to the **named human operator** and confirm acknowledgment (committing alone is not delivery). If the draft needs a **material** change (a step wrong, missing, or unsafe), do **not** edit-and-ship — route the gap back to the worker, who revises **and re-validates**, so the executed handbook is always the cross-model-validated one (mechanical fixes — typos, the filename/SHA stamp — are yours); under **`yolo`** the worker's direct deploy is a reserved action it executes only on a dispatch that **cites apex authorization** — you do not green-path it, and you record its post-deploy smoke from the close-out. (Execution is gated by the worker's own contract; until that contract grants the deploy token the worker fails closed and stops-and-routes, so a `yolo` dispatch is safe regardless.)
+
+### Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.
 
 <!-- END GENERATED: doctrine lead -->

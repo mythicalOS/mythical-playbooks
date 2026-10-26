@@ -6,7 +6,7 @@
     "id": "explorer",
     "class": "reconnaissance",
     "authority_source": "operator_dispatch",
-    "playbook": "roles/explorer-agent.md"
+    "playbook": "archive/full/explorer-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -142,10 +142,6 @@
     }
   ],
   "doctrine_source": "doctrine/explorer.md",
-  "generated_surfaces": [
-    "roles/explorer-agent.md",
-    "roles/explorer-agent.claude.md",
-    "roles/explorer-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": false
 }

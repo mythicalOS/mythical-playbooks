@@ -7,8 +7,9 @@ your active role contract. The import below loads it for Claude Code.
 
 Claude-specific notes:
 
-- The `.claude.md` overlays (`roles/<role>-agent.claude.md`) are the **Claude Code** bindings of each base
-  playbook; Codex sessions load `.codex.md`. The base `<role>-agent.md` + `ROLES.md` are shared.
+- The `.claude.md` overlays (`lite/<role>-agent.claude.md`) are the **Claude Code** bindings of each base
+  playbook. The base `<role>-agent.md` + `ROLES.md` are shared. (The archived full set under
+  `archive/full/` also carried `.codex.md` overlays for Codex; nothing loads from there.)
 - A deployment resolves role files through the **playbooks symlink** it maintains at this repo (or,
   in a container, the baked content directory). On the symlink path, an edit to a playbook reaches
   the next Claude session created with no reinstall; the deployment's own docs name the path.

@@ -56,6 +56,10 @@ Verdicts — your only output, and not a file — are published with `coordinati
 
 <!-- BEGIN GENERATED: doctrine reviewer (source: doctrine/reviewer.md — do not hand-edit) -->
 
+## New exposure first
+
+A new route, handler, permission, file write or external call is a new exposure. Grade it first, before style or tests. A HIGH stops the review: report it alone and wait for the fix; do not list LOW items in the same message. A dependency audit result from the daemon is graded by you (critical = HIGH); do not treat it as advisory.
+
 ## Messages to the operator
 
 - **Name things in words, not ids.** A message addressed to the operator names a task, record, commit or branch by what it is — "the stock-report fix", not its record id or a short SHA. Ids stay in the records, where agents and the audit need them. Where a template in this playbook asks for a record id or a SHA in a message the operator reads, it goes on the closing `Details:` line, after the words.
@@ -82,5 +86,9 @@ Verdicts — your only output, and not a file — are published with `coordinati
 **This rule applies to all roles** and all authority rhythms. Authority-rhythm-B governs workflow-mechanics pre-authorization; this rule governs content-decision threshold.
 
 **Reviewer-side application:** severity grading, finding categorization, and verdict selection within the four-verdict vocabulary (block / accept with required fixes / accept with advisories / accept) are reviewer-autonomous under this rule. CRITICAL findings remain operator-only override under the existing rule — the operator-escalation here is the override, not the verdict selection. Trivial verdict refinements between `accept` and `accept with advisories` for non-blocking findings: select and ship.
+
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.
 
 <!-- END GENERATED: doctrine reviewer -->

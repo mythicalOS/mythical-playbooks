@@ -184,7 +184,7 @@ renderer + lint keep the two in lockstep.
 - `role-policies/<role>.policy.json` is authoritative for allowed skills, activation triggers,
   rhythm-dependent permissions, channels, artefact ownership, mutation/push boundaries, STOP routing,
   escalation, and override rules.
-- `roles/<role>-agent.md` is authoritative for identity, reasoning discipline, quality standard, and
+- `lite/<role>-agent.md` is authoritative for identity, reasoning discipline, quality standard, and
   collaboration behaviour.
 - A `SKILL.md` is procedural only — it cannot grant authority absent from the invoking role's policy.
 - Agents load the **generated** markdown renderings, never the JSON.
@@ -197,14 +197,14 @@ runtime precedence contract.
 
 ## The role files
 
-Thirty-three role playbook files under `roles/`: the nine delivery, review, and observation roles ×
-(base + Claude Code overlay + Codex overlay) = 27, plus the operational **CTO** apex set (3) and the
-operator-only **Devil** sparring set (3). One strategic role stub (`spm-agent.md`) is defined but not
-operational — SPM-class concerns route to the operator.
+Twenty-two role playbook files under `lite/`: the nine delivery, review, and observation roles ×
+(base + Claude Code overlay) = 18, plus the operational **CTO** apex pair (2) and the operator-only
+**Devil** sparring pair (2). One strategic role stub (`spm`) exists only in the archived full set
+(`archive/full/spm-agent.md`) and is not operational — SPM-class concerns route to the operator.
 
 The base playbook is the role contract — direct system-prompt format, framework-agnostic,
-principle-heavy. The `.claude.md` overlay adds Claude Code affordances; the `.codex.md` overlay does
-the same for Codex. Principles live in the base; overlays never duplicate them. When a project needs
+principle-heavy. The `.claude.md` overlay adds Claude Code affordances. Principles live in the base;
+overlays never duplicate them. When a project needs
 per-project identity, paths, or conventions, put an overlay at
 `<project-repo>/skills/<role>-agent.md` — it extends, never duplicates.
 

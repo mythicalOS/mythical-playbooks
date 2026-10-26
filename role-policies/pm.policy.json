@@ -6,7 +6,7 @@
     "id": "pm",
     "class": "planning",
     "authority_source": "operator_or_user_scoping_request",
-    "playbook": "roles/pm-agent.md"
+    "playbook": "archive/full/pm-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -232,10 +232,6 @@
     }
   ],
   "doctrine_source": "doctrine/pm.md",
-  "generated_surfaces": [
-    "roles/pm-agent.md",
-    "roles/pm-agent.claude.md",
-    "roles/pm-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": true
 }

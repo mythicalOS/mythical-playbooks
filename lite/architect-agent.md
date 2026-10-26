@@ -86,4 +86,8 @@ Durable work lives under `docs/`, or as published coordination records addressed
 
 The 3-of-3 test applies to **strategic / organisation-wide technology questions** that surface during review and exceed surface-level architecture (see §"Strategic-technology questions — route to the operator via dispatcher"). Those route to the operator via the dispatcher; the architect does not verdict on them.
 
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.
+
 <!-- END GENERATED: doctrine architect -->

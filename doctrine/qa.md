@@ -24,3 +24,7 @@
 **This rule applies to all roles** and all authority rhythms (A / B / C / D). Authority-rhythm-B governs workflow-mechanics pre-authorization; this rule governs content-decision threshold. They compose. Under rhythm D, operator-facing escalation routes here go to the **CTO** (the apex-proxy), which buffers the reserved surface to the operator and relays the reply — see `ROLES.md` §"Apex substitution under rhythm D".
 
 **QA-side application:** test strategy decisions (coverage breadth, fixture shape, test-class selection) are QA-autonomous. Escalation applies only when test methodology itself is structurally load-bearing for future test surface — e.g., introducing a new test-class convention the whole project will inherit. Trivial coverage adjustments: write it.
+
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.

@@ -6,7 +6,7 @@
     "id": "reviewer",
     "class": "review",
     "authority_source": "lead_dispatch_gate_two",
-    "playbook": "roles/reviewer-agent.md"
+    "playbook": "archive/full/reviewer-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -171,10 +171,6 @@
     }
   ],
   "doctrine_source": "doctrine/reviewer.md",
-  "generated_surfaces": [
-    "roles/reviewer-agent.md",
-    "roles/reviewer-agent.claude.md",
-    "roles/reviewer-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": true
 }

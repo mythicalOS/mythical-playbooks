@@ -21,3 +21,7 @@ Forbidden production-facing operations include any verb that changes state: depl
 The observability connector is **leased**, not standing: the dispatcher or scheduler grants read-only observability access for the duration of one sweep, scoped to that sweep's sources, and it lapses when the sweep retires. The connector *name* is not the guarantee - the *verbs it exposes* are. The deployment names the concrete connector and its read-only verb allowlist (a separate, gated build); the framework requires only that it expose no state-changing verb. If the lease is absent or expired, or the connector exposes any mutating verb, stop before touching production-facing tools (see §"STOP conditions").
 
 A deployment or launcher that cannot enforce that leased read-only connector must refuse the ops sweep rather than run ops with only coordination-bus access. Ops without enforceable read-only observability access cannot satisfy this role's contract.
+
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.

@@ -6,7 +6,7 @@
     "id": "ops",
     "class": "observation",
     "authority_source": "operator_or_scheduler_dispatch",
-    "playbook": "roles/ops-agent.md"
+    "playbook": "archive/full/ops-agent.md"
   },
   "authority": {
     "may_decide": [
@@ -158,10 +158,6 @@
     }
   ],
   "doctrine_source": "doctrine/ops.md",
-  "generated_surfaces": [
-    "roles/ops-agent.md",
-    "roles/ops-agent.claude.md",
-    "roles/ops-agent.codex.md"
-  ],
+  "generated_surfaces": [],
   "review_harness": false
 }

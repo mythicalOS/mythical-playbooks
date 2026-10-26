@@ -9,8 +9,8 @@ preserve it.
 - One base (`<role>-agent.md`) + one host overlay (`<role>-agent.claude.md`) per role.
 - One machine-readable contract (`role-policies/<role>.policy.json`) per role.
 - Each base ends in a **generated doctrine block** — the role's governance doctrine, authored once
-  in the repository-root `doctrine/<role>.md` and rendered into both weights, so the doctrine a
-  role teaches cannot drift between them. Edit the source file, never the rendered block.
+  in the repository-root `doctrine/<role>.md` and rendered in by the toolchain. Edit the source
+  file, never the rendered block.
 
 The human directing an instance is addressed as the **operator** throughout; the runtime may
 supply a preferred call-name at session start.

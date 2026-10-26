@@ -968,25 +968,32 @@ def substrate_check():
         tools_by_file[path] = found
 
     # (b) per-role tool-set equality, per weight, union over base + overlays.
-    shipped = {w: weight_roles(w) for w in WEIGHTS}
-    for weight in WEIGHTS:
+    # A weight is SHIPPED when its directory exists. The full prose weight was
+    # archived (archive/full/README.md) and its policy set kept as contract data
+    # only, so `roles/` owes no base and takes part in no equality: the rules
+    # below run over the shipped weights alone. (The selftest stages both
+    # weights, so the two-weight equality stays proven there.)
+    shipped_weights = [w for w in WEIGHTS if os.path.isdir(os.path.join(root_dir, w))]
+    shipped = {w: weight_roles(w) for w in shipped_weights}
+    for weight in shipped_weights:
         for role in sorted(shipped[weight]):
             base = os.path.join(root_dir, weight, f"{role}-agent.md")
             if not os.path.isfile(base):
                 findings.append(
                     f"SUBSTRATE-BASE {weight}/{role}-agent.md: the policy manifest ships "
                     f"role '{role}' in this weight but its base playbook is missing")
-    for role in sorted(shipped[WEIGHTS[0]] & shipped[WEIGHTS[1]]):
-        sets = {}
-        for weight in WEIGHTS:
-            acc = set()
-            for path in role_surfaces(weight, role):
-                acc |= tools_by_file.get(path, set())
-            sets[weight] = acc
-        for weight, other in ((WEIGHTS[0], WEIGHTS[1]), (WEIGHTS[1], WEIGHTS[0])):
-            only = sorted(sets[weight] - sets[other])
-            if only:
-                findings.append(f"SUBSTRATE-SET {role}: only in {weight}: " + " ".join(only))
+    if len(shipped_weights) == len(WEIGHTS):
+        for role in sorted(shipped[WEIGHTS[0]] & shipped[WEIGHTS[1]]):
+            sets = {}
+            for weight in WEIGHTS:
+                acc = set()
+                for path in role_surfaces(weight, role):
+                    acc |= tools_by_file.get(path, set())
+                sets[weight] = acc
+            for weight, other in ((WEIGHTS[0], WEIGHTS[1]), (WEIGHTS[1], WEIGHTS[0])):
+                only = sorted(sets[weight] - sets[other])
+                if only:
+                    findings.append(f"SUBSTRATE-SET {role}: only in {weight}: " + " ".join(only))
 
     # (g) COORDINATION ARTEFACTS ARE NEVER FILES — for every role, whatever its
     # write scope. Rule (f) below keys on an EMPTY write scope, which is exactly
@@ -2240,12 +2247,27 @@ stage() {  # fresh scratch copy of both sets + the exceptions file
   # references and legacy tokens. Copying the live files would let a substrate
   # case pass off pre-existing drift (the corpus is mid-convergence) or let a
   # shipped overlay mask a mutation of its base, and prove nothing either way.
-  local f
+  local f b
   local -a rels=()
-  for f in role-policies/*.policy.json lite/role-policies/*.policy.json roles/*.md lite/*.md; do
+  for f in role-policies/*.policy.json lite/role-policies/*.policy.json lite/*.md; do
     [ -e "$f" ] || continue
     case "$f" in *.md) printf '# fixture\n' > "$TMP/repo/$f" ;; esac
     rels+=("$f")
+  done
+  # The full prose weight is archived (archive/full/) and ships no files, so its
+  # stubs are SYNTHESISED — one base per full-set policy, plus a mirror of each
+  # lite overlay name — and the checker's two-weight rules stay proven on a
+  # weight the live corpus no longer carries.
+  for f in role-policies/*.policy.json; do
+    [ -e "$f" ] || continue
+    b=$(basename "$f" .policy.json)
+    printf '# fixture\n' > "$TMP/repo/roles/${b}-agent.md"
+    rels+=("roles/${b}-agent.md")
+  done
+  for f in lite/*.claude.md; do
+    [ -e "$f" ] || continue
+    printf '# fixture\n' > "$TMP/repo/roles/$(basename "$f")"
+    rels+=("roles/$(basename "$f")")
   done
   # The root boundary contract is a scanned surface too — stage a clean stub so
   # a case can mutate it and prove it is actually reached.

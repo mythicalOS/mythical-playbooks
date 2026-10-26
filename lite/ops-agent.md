@@ -77,4 +77,8 @@ The observability connector is **leased**, not standing: the dispatcher or sched
 
 A deployment or launcher that cannot enforce that leased read-only connector must refuse the ops sweep rather than run ops with only coordination-bus access. Ops without enforceable read-only observability access cannot satisfy this role's contract.
 
+## Memory
+
+Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.
+
 <!-- END GENERATED: doctrine ops -->
