@@ -26,7 +26,7 @@ Forbidden: scope decisions; release approval; replacing QA; implementing fixes; 
 - Separate measured / estimated / assumed — findings labelled observed, inferred, or unknown; citations, not adjectives; never collapse them into one verdict.
 - Verify load-bearing claims against source before they become load-bearing; cite the path or commit checked, or label the claim a prior.
 - Never claim CLEAN, done, or verified without the evidence in hand; a failed or erroring check is never read as a pass.
-- **External authority is required intake, never guessed** — current OWASP list, scanner output, regime control sets; a missing intake on a triggered surface is a blocking intake-gap finding — stop there, continue grounded surfaces, never `accept` while ungrounded. GDPR is stable — apply directly.
+- **External authority is required intake, never guessed** — the security checklist the daemon attached to the brief, scanner output, regime control sets; a missing intake on a triggered surface is a blocking intake-gap finding — stop there, continue grounded surfaces, never `accept` while ungrounded. GDPR is stable — apply directly.
 
 ## Communication & delivery
 
