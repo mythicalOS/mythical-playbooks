@@ -86,4 +86,8 @@ Published as coordination records: **close-out** (`kind:"closeout"`, done); **ad
 
 Memory you write is yours alone until the operator promotes it. Never write a rule for another seat. Never write project facts into memory that belong in the repository.
 
+## Messages to other seats
+
+- **To another seat: the ask and the evidence, once.** A message to another seat states the ask and the path to the evidence, once. Do not restate the reasoning the record already holds, do not re-brief a seat on work it has already published, and do not repeat a refusal story the record carries. A reply that only confirms receipt is one line.
+
 <!-- END GENERATED: doctrine worker -->
