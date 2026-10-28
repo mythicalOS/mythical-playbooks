@@ -63,19 +63,23 @@ Yours: task briefs (`kind:"task"`), gate close-outs (`kind:"closeout"` — the w
 
 <!-- BEGIN GENERATED: doctrine lead (source: doctrine/lead.md — do not hand-edit) -->
 
-### Review rounds
-
-Cross-model review rounds are for code and for decisions that change scope. A requirements note, a plan, a close-out or the wording of a verdict gets one read by its recipient and no review run; if a review run is already open on such a document, do not spend further turns on wording.
-
 ### Questions only the operator can answer
 
 Any question that only the operator can answer goes to the operator in the structured question form, before you dispatch work that depends on it. Never ask the team to guess. When you accept a brief, the security and compliance checks you must run are the ones listed in the brief by the daemon; you do not fetch lists from the web.
+
+Every dispatch to a reviewer or architect names the task it serves, in the dispatch itself.
+
+When a later choice replaces an earlier decision record, the new record names the one it supersedes.
 
 ### The decision record
 
 "Decide and ship" without a `decision` record is a defect. A decision record is one paragraph; a message to the team is not a record.
 
-Write a decision record when you choose between options the brief leaves open, when you accept or defer a finding, when you change what an endpoint accepts, or when you add or change a dependency. `why` names the fact that decided it; `excludes` names what you did not do and will not do this cycle; `flag` is `operator-must-see` when the operator would want to reverse it before deployment, otherwise `routine`. A decision told only in a message is not recorded.
+Write a decision record when you choose between options the brief leaves open, when you accept or defer a finding, when you change what an endpoint accepts, or when you add or change a dependency. `why` names the fact that decided it; `excludes` names what you did not do and will not do this cycle; `flag` is `operator-must-see` when the operator would want to reverse it before deployment, otherwise `routine`. A decision told only in a message is not recorded. Passing a review finding on to the lead is not a decision and gets no record; dismissing, accepting or deferring one is.
+
+### Review rounds
+
+Cross-model review rounds are for code and for decisions that change scope. A verdict, requirements note, plan, close-out or any other document gets one read by its recipient and no review run, whoever wrote it; a finding on a document's wording is fixed by its author in one edit and goes no further.
 
 ### Messages to the operator
 
@@ -86,6 +90,7 @@ Write a decision record when you choose between options the brief leaves open, w
 - **Say a thing once.** Each fact appears once in a turn; never write the same summary twice. Include the status block only when something in it changed since the one you last sent, or the operator asked for it — this holds over any rule in this playbook that asks for a status block on every substantive response. When you pick up a session, the pickup orientation goes into the session's record, with one line in chat.
 - **A queued item gets a note, not a message.** A question or decision that names an item already in the operator's queue is attached to that item by the daemon as a note; do not send it as a new message.
 - **To another seat: the ask and the evidence, once.** A message to another seat states the ask and the path to the evidence, once. Do not restate the reasoning the record already holds, do not re-brief a seat on work it has already published, and do not repeat a refusal story the record carries. A reply that only confirms receipt is one line.
+- **A question names what is true when it is sent.** A question to the operator names the commit, branch and result it is about as they stand at that moment; if they change before the answer arrives, send a one-line update naming the new ones.
 
 ### Dispatch-brief header fields
 

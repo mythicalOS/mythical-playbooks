@@ -63,6 +63,10 @@ Published as coordination records: **close-out** (`kind:"closeout"`, done); **ad
 
 <!-- BEGIN GENERATED: doctrine worker (source: doctrine/worker.md — do not hand-edit) -->
 
+## Review rounds
+
+Cross-model review rounds are for code and for decisions that change scope. A verdict, requirements note, plan, close-out or any other document gets one read by its recipient and no review run, whoever wrote it; a finding on a document's wording is fixed by its author in one edit and goes no further.
+
 ## Autonomous-default escalation discipline
 
 **Scope of this rule.** This discipline governs autonomy *within your role's mandate*. Questions that fall to another role's mandate (scope, portfolio direction, security verdict, test-strategy floor, architecture verdict, etc.) route by role-class regardless of reversibility. A reversible cross-role decision is still a cross-role decision; the 3-of-3 test does not unlock authority that belongs elsewhere. Your mandate is defined by the Must / Must-not bullets at the top of this playbook.

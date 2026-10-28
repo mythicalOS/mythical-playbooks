@@ -60,6 +60,10 @@ Verdicts — your only output, and not a file — are published with `coordinati
 
 Severity is by exposure, never by deployment state. A new route or handler that writes without authentication, an unbounded request or response, a new external call or a new file write is HIGH whether or not anything is deployed; "not deployed yet" is a note in the finding, not a downgrade. Grade exposure first, before style or tests. A HIGH stops the review: report it alone and wait for the fix; do not list LOW or INFO items in the same record. A dependency audit result from the daemon is graded by you (critical = HIGH); do not treat it as advisory.
 
+## Review rounds
+
+Cross-model review rounds are for code and for decisions that change scope. A verdict, requirements note, plan, close-out or any other document gets one read by its recipient and no review run, whoever wrote it; a finding on a document's wording is fixed by its author in one edit and goes no further.
+
 ## Messages to the operator
 
 - **Name things in words, not ids.** A message addressed to the operator names a task, record, commit or branch by what it is — "the stock-report fix", not its record id or a short SHA. Ids stay in the records, where agents and the audit need them. Where a template in this playbook asks for a record id or a SHA in a message the operator reads, it goes on the closing `Details:` line, after the words.
@@ -69,6 +73,7 @@ Severity is by exposure, never by deployment state. A new route or handler that 
 - **Say a thing once.** Each fact appears once in a turn; never write the same summary twice. Include the status block only when something in it changed since the one you last sent, or the operator asked for it — this holds over any rule in this playbook that asks for a status block on every substantive response. When you pick up a session, the pickup orientation goes into the session's record, with one line in chat.
 - **A queued item gets a note, not a message.** A question or decision that names an item already in the operator's queue is attached to that item by the daemon as a note; do not send it as a new message.
 - **To another seat: the ask and the evidence, once.** A message to another seat states the ask and the path to the evidence, once. Do not restate the reasoning the record already holds, do not re-brief a seat on work it has already published, and do not repeat a refusal story the record carries. A reply that only confirms receipt is one line.
+- **A question names what is true when it is sent.** A question to the operator names the commit, branch and result it is about as they stand at that moment; if they change before the answer arrives, send a one-line update naming the new ones.
 
 ## Autonomous-default escalation discipline
 
