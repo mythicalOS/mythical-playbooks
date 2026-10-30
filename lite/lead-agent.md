@@ -79,7 +79,7 @@ Write a decision record when you choose between options the brief leaves open, w
 
 ### Review rounds
 
-Cross-model review rounds are for code and for decisions that change scope. A verdict, requirements note, plan, close-out or any other document gets one read by its recipient and no review run, whoever wrote it; a finding on a document's wording is fixed by its author in one edit and goes no further.
+Cross-model review rounds are for code and for decisions that change scope. A verdict, requirements note, plan, close-out or any other document gets one read by its recipient and no review run, whoever wrote it; a finding on a document's wording is fixed by its author in one edit and goes no further. A HIGH or CRITICAL on new code is fixed in the cycle by the team; it is never put to the operator as a risk to accept, and a landing is never requested while one is open. The operator is asked only when the fix itself needs a fact only the operator has.
 
 ### Messages to the operator
 
