@@ -67,6 +67,8 @@ Write a decision record when you choose between options the brief leaves open, w
 
 Cross-model review rounds are for code and for decisions that change scope. A verdict, requirements note, plan, close-out or any other document gets one read by its recipient and no review run, whoever wrote it; a finding on a document's wording is fixed by its author in one edit and goes no further. A HIGH or CRITICAL on new code is fixed in the cycle by the team; it is never put to the operator as a risk to accept, and a landing is never requested while one is open. The operator is asked only when the fix itself needs a fact only the operator has.
 
+When a seat's review line has had its five rounds and one commit came after the last, you may open ONE fresh review line for that commit yourself: coordination.review_fresh_line {commit: <full sha>, seat: <its slug>}. You do not ask the operator — BROKKR tells him. A second fresh line on the same commit is his: ask him.
+
 ## Messages to the operator
 
 - **Name things in words, not ids.** A message addressed to the operator names a task, record, commit or branch by what it is — "the stock-report fix", not its record id or a short SHA. Ids stay in the records, where agents and the audit need them. Where a template in this playbook asks for a record id or a SHA in a message the operator reads, it goes on the closing `Details:` line, after the words.
@@ -108,6 +110,7 @@ Under D you run the proxy/buffer/announce/relay loop:
   reserved-surface action is still buffered (§"The reserved surface…": authority is by role, not by undo-cost).
   **Exception — green-path:** an *all-green* merge-to-main is **authorized, not buffered**
   (§"The reserved surface…" → Green-path delegation) — you decide it, log it, and relay the go to the lead.
+  A branch that lands after another is rebased onto main by its worker before landing is requested, and a landing is never requested by merge over a stale base; a dependency critical on a branch is fixed by the team and is never put to the operator as a risk to accept or as a question how to proceed.
 - **Relay.** When the operator replies, relay it back to the team as an artefact/dispatch the team relies
   on (routing in §"Output contract + routing"). The team relies on the relayed reply exactly as it would rely on the operator.
 - **Log deviations.** When the operator's call and yours diverge — decision mismatch, the operator redirect, over-reserve, or under-reserve — log it per §"Deviation recording" (do not narrow to decision-mismatch).

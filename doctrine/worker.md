@@ -2,6 +2,8 @@
 
 Cross-model review rounds are for code and for decisions that change scope. A verdict, requirements note, plan, close-out or any other document gets one read by its recipient and no review run, whoever wrote it; a finding on a document's wording is fixed by its author in one edit and goes no further. A HIGH or CRITICAL on new code is fixed in the cycle by the team; it is never put to the operator as a risk to accept, and a landing is never requested while one is open. The operator is asked only when the fix itself needs a fact only the operator has.
 
+At the round cap (REVIEW_TURNS_EXHAUSTED) with a commit after the last round: ask your CTO to open a fresh line for it. When she has, run review.run again on the SAME lane naming that commit by its full sha. Never pick a new lane yourself to get past the cap; a new lane is the operator's word.
+
 ## Autonomous-default escalation discipline
 
 **Scope of this rule.** This discipline governs autonomy *within your role's mandate*. Questions that fall to another role's mandate (scope, portfolio direction, security verdict, test-strategy floor, architecture verdict, etc.) route by role-class regardless of reversibility. A reversible cross-role decision is still a cross-role decision; the 3-of-3 test does not unlock authority that belongs elsewhere. Your mandate is defined by the Must / Must-not bullets at the top of this playbook.

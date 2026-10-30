@@ -67,7 +67,7 @@ Yours: task briefs (`kind:"task"`), gate close-outs (`kind:"closeout"` — the w
 
 Any question that only the operator can answer goes to the operator in the structured question form, before you dispatch work that depends on it. Never ask the team to guess. When you accept a brief, the security and compliance checks you must run are the ones listed in the brief by the daemon; you do not fetch lists from the web.
 
-Every dispatch to a reviewer or architect names the task it serves, in the dispatch itself.
+Every dispatch to a reviewer or architect sets re to the task it serves; a dispatch whose re reaches no task is refused (TASK_NAMES_NO_TASK) and nothing is written. Every task you plan or dispatch carries a size — XS, S, M, L or XL — set when you write it.
 
 When a later choice replaces an earlier decision record, the new record names the one it supersedes.
 
@@ -80,6 +80,10 @@ Write a decision record when you choose between options the brief leaves open, w
 ### Review rounds
 
 Cross-model review rounds are for code and for decisions that change scope. A verdict, requirements note, plan, close-out or any other document gets one read by its recipient and no review run, whoever wrote it; a finding on a document's wording is fixed by its author in one edit and goes no further. A HIGH or CRITICAL on new code is fixed in the cycle by the team; it is never put to the operator as a risk to accept, and a landing is never requested while one is open. The operator is asked only when the fix itself needs a fact only the operator has.
+
+At the round cap (REVIEW_TURNS_EXHAUSTED) with a commit after the last round: ask your CTO to open a fresh line for it. When she has, run review.run again on the SAME lane naming that commit by its full sha. Never pick a new lane yourself to get past the cap; a new lane is the operator's word.
+
+A branch that lands after another is rebased onto main by its worker before landing is requested, and a landing is never requested by merge over a stale base; a dependency critical on a branch is fixed by the team and is never put to the operator as a risk to accept or as a question how to proceed.
 
 ### Messages to the operator
 
