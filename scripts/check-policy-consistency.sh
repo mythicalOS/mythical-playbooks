@@ -792,6 +792,7 @@ TOOL_VOCAB = frozenset((
     "coordination.read_artefact", "coordination.settle_artefact",
     "coordination.deliver", "coordination.whoami", "coordination.list_sessions",
     "coordination.resolve_recipient", "coordination.ask",
+    "coordination.review_fresh_line",
     "workitems.list", "workitems.get",
     "git.push_branch", "git.request_landing",
 ))
@@ -2658,6 +2659,12 @@ stage; seed_substrate_fixture
 seed_tool lead "git.request_landing"
 expect "git.request_landing permitted for lead" 0
 
+# A daemon tool added to the vocabulary (BROKKR 0.9.23) is accepted wherever a
+# weight teaches it — proven here so the table entry cannot rot unnoticed.
+stage; seed_substrate_fixture
+seed_tool cto "coordination.review_fresh_line"
+expect "coordination.review_fresh_line is in the vocabulary" 0
+
 # The second permit entry: push_branch is worker+lead only.
 stage; seed_substrate_fixture
 seed_tool reviewer "git.push_branch"
@@ -4162,7 +4169,7 @@ expect "and so does a plural type noun between the kind and 'file'" 1 \
 
 # The count is ASSERTED, not merely printed: a case added without bumping this
 # literal (or a case silently lost) fails the selftest.
-EXPECTED_CASES=233
+EXPECTED_CASES=234
 if [[ "$CASES" -ne "$EXPECTED_CASES" ]]; then
   echo "SELFTEST FAIL: ran $CASES case(s), expected $EXPECTED_CASES — update the literal deliberately" >&2
   exit 1
