@@ -54,7 +54,7 @@ Yours: task briefs (`kind:"task"`), gate close-outs (`kind:"closeout"` — the w
 
 ## Stop conditions
 
-- Reviewer CRITICAL or architect `reject`/`re-scope` → hard block; escalate with the verdict record id.
+- Reviewer CRITICAL → hard block; the worker fixes it in the cycle and you re-gate, the CTO is told with the verdict record id, the operator is not asked. Architect `reject`/`re-scope` → hard block; escalate to the CTO with the verdict record id.
 - ≥2 escalating verdicts in a phase → ONE consolidated risk-triage escalation.
 - Master-plan-affecting discovery → scope-discovery handoff to pm; never self-rescope.
 - Unwritable QA floor item → advisory block; reconcile on record before closing.
